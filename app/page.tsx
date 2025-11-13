@@ -34,7 +34,10 @@ export default function MapBox3D() {
   const [allPlaces, setAllPlaces] = useState<(Place & { coordinates: [number, number] })[]>([]);
   const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
 
-  // Function to search places using Mapbox Geocoding API
+  // Tileset ID untuk data cagar budaya
+  const TILESET_ID = 'budicuy.cmhwwaopc01wc1qmskt9s5j8g-92ahp';
+
+  // Function to search places using Tileset Query API
   const searchPlaces = async (query: string) => {
     if (!query.trim()) {
       // Load default places for Jakarta
@@ -46,120 +49,213 @@ export default function MapBox3D() {
     const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN_HERE';
 
     try {
-      // Search for landmarks, monuments, buildings in Jakarta
-      const response = await fetch(
+      // First, try to geocode the query to get coordinates
+      const geocodeResponse = await fetch(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
         `access_token=${accessToken}&` +
         `country=ID&` +
-        `proximity=106.8272,-6.1751&` +
-        `types=poi,address,place&` +
-        `limit=20&` +
-        `language=id`
+        `limit=1`
+      );
+
+      const geocodeData = await geocodeResponse.json();
+
+      if (geocodeData.features && geocodeData.features.length > 0) {
+        // Get coordinates from geocoding result
+        const [lng, lat] = geocodeData.features[0].center;
+
+        // Search places around this location using tileset
+        const tilesetResponse = await fetch(
+          `https://api.mapbox.com/v4/${TILESET_ID}/tilequery/${lng},${lat}.json?` +
+          `access_token=${accessToken}&` +
+          `radius=30000&` +
+          `limit=50`
+        );
+
+        const tilesetData = await tilesetResponse.json();
+
+        if (tilesetData.features && tilesetData.features.length > 0) {
+          const newPlaces = tilesetData.features.map((feature: any, index: number) => {
+            const props = feature.properties;
+            const coords = feature.geometry.coordinates;
+            const visitors = Math.floor(Math.random() * 500) + 50;
+
+            return {
+              id: feature.id || index + 1,
+              name: props.nama || 'Destinasi Wisata',
+              category: props.jenis || 'Situs',
+              location: `${props.kota || ''}, ${props.provinsi || 'Indonesia'}`.trim(),
+              description: props.deskripsi && props.deskripsi !== '-'
+                ? props.deskripsi
+                : `${props.nama} adalah salah satu cagar budaya yang terdaftar di ${props.kota || 'Indonesia'}. Kode: ${props.kode || '-'}`,
+              visitors: `${visitors} orang pernah ke sini`,
+              image: getImageFromCategory(props.jenis || 'Situs'),
+              coordinates: coords as [number, number]
+            };
+          });
+
+          setAllPlaces(newPlaces);
+          setPlaces(newPlaces);
+
+          // Fly to the searched location
+          if (map.current && newPlaces.length > 0) {
+            map.current.flyTo({
+              center: [lng, lat],
+              zoom: 14,
+              pitch: 60,
+              bearing: -17.6,
+              duration: 2000
+            });
+          }
+        } else {
+          // If no results from tileset, try filtering local data
+          const filtered = allPlaces.filter(place =>
+            place.name.toLowerCase().includes(query.toLowerCase()) ||
+            place.location.toLowerCase().includes(query.toLowerCase()) ||
+            place.category.toLowerCase().includes(query.toLowerCase())
+          );
+          setPlaces(filtered);
+        }
+      } else {
+        // If geocoding fails, try filtering local data
+        const filtered = allPlaces.filter(place =>
+          place.name.toLowerCase().includes(query.toLowerCase()) ||
+          place.location.toLowerCase().includes(query.toLowerCase()) ||
+          place.category.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (filtered.length > 0) {
+          setPlaces(filtered);
+        } else {
+          loadDefaultPlaces();
+        }
+      }
+    } catch (error) {
+      console.error('Error searching places:', error);
+      // Fallback to local filtering
+      const filtered = allPlaces.filter(place =>
+        place.name.toLowerCase().includes(query.toLowerCase()) ||
+        place.location.toLowerCase().includes(query.toLowerCase()) ||
+        place.category.toLowerCase().includes(query.toLowerCase())
+      );
+      if (filtered.length > 0) {
+        setPlaces(filtered);
+      } else {
+        loadDefaultPlaces();
+      }
+    } finally {
+      setIsSearching(false);
+    }
+  };  // Load default places from Tileset for Jakarta area
+  const loadDefaultPlaces = async () => {
+    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN_HERE';
+
+    // Jakarta center coordinates
+    const centerLng = 106.8272;
+    const centerLat = -6.1751;
+
+    try {
+      // Query tileset for places within 50km radius of Jakarta center
+      const response = await fetch(
+        `https://api.mapbox.com/v4/${TILESET_ID}/tilequery/${centerLng},${centerLat}.json?` +
+        `access_token=${accessToken}&` +
+        `radius=50000&` +
+        `limit=50`
       );
 
       const data = await response.json();
 
       if (data.features && data.features.length > 0) {
         const newPlaces = data.features.map((feature: any, index: number) => {
-          const category = getCategoryFromFeature(feature);
+          const props = feature.properties;
+          const coords = feature.geometry.coordinates;
           const visitors = Math.floor(Math.random() * 500) + 50;
 
           return {
-            id: index + 1,
-            name: feature.text || feature.place_name.split(',')[0],
-            category: category,
-            location: feature.place_name.split(',').slice(1).join(',').trim() || 'Jakarta, Indonesia',
-            description: feature.properties?.address || `${feature.text} adalah salah satu tempat menarik di ${feature.place_name.split(',')[1] || 'Jakarta'}`,
+            id: feature.id || index + 1,
+            name: props.nama || 'Destinasi Wisata',
+            category: props.jenis || 'Situs',
+            location: `${props.kota || ''}, ${props.provinsi || 'Indonesia'}`.trim(),
+            description: props.deskripsi && props.deskripsi !== '-'
+              ? props.deskripsi
+              : `${props.nama} adalah salah satu cagar budaya yang terdaftar di ${props.kota || 'Indonesia'}. Kode: ${props.kode || '-'}`,
             visitors: `${visitors} orang pernah ke sini`,
-            image: getImageFromCategory(category),
-            coordinates: feature.center as [number, number]
+            image: getImageFromCategory(props.jenis || 'Situs'),
+            coordinates: coords as [number, number]
           };
+        });
+
+        // Sort by distance (closest first)
+        newPlaces.sort((a: any, b: any) => {
+          const distA = calculateDistance(centerLng, centerLat, a.coordinates[0], a.coordinates[1]);
+          const distB = calculateDistance(centerLng, centerLat, b.coordinates[0], b.coordinates[1]);
+          return distA - distB;
         });
 
         setAllPlaces(newPlaces);
         setPlaces(newPlaces);
       }
     } catch (error) {
-      console.error('Error searching places:', error);
-      loadDefaultPlaces();
-    } finally {
-      setIsSearching(false);
+      console.error('Error loading places from tileset:', error);
     }
-  };  // Load default places for Jakarta monuments and landmarks
-  const loadDefaultPlaces = async () => {
-    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN_HERE';
-    const landmarks = [
-      'Monumen Nasional Jakarta',
-      'Istana Merdeka Jakarta',
-      'Masjid Istiqlal Jakarta',
-      'Gereja Katedral Jakarta',
-      'Museum Nasional Jakarta',
-      'Taman Mini Indonesia Indah',
-      'Kota Tua Jakarta',
-      'Ancol Jakarta',
-      'Bundaran HI Jakarta',
-      'Gelora Bung Karno'
-    ];
-
-    const allPlaces: (Place & { coordinates: [number, number] })[] = [];
-
-    for (const landmark of landmarks) {
-      try {
-        const response = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(landmark)}.json?` +
-          `access_token=${accessToken}&` +
-          `country=ID&` +
-          `limit=1&` +
-          `language=id`
-        );
-
-        const data = await response.json();
-
-        if (data.features && data.features.length > 0) {
-          const feature = data.features[0];
-          const category = getCategoryFromFeature(feature);
-          const visitors = Math.floor(Math.random() * 500) + 50;
-
-          allPlaces.push({
-            id: allPlaces.length + 1,
-            name: feature.text || feature.place_name.split(',')[0],
-            category: category,
-            location: feature.place_name.split(',').slice(1).join(',').trim() || 'Jakarta, Indonesia',
-            description: `${feature.text} adalah salah satu landmark bersejarah dan ikon penting di Jakarta yang wajib dikunjungi`,
-            visitors: `${visitors} orang pernah ke sini`,
-            image: getImageFromCategory(category),
-            coordinates: feature.center as [number, number]
-          });
-        }
-      } catch (error) {
-        console.error(`Error loading ${landmark}:`, error);
-      }
-    }
-
-    setAllPlaces(allPlaces);
-    setPlaces(allPlaces);
   };
 
-  // Helper function to determine category from feature
-  const getCategoryFromFeature = (feature: any): string => {
-    const properties = feature.properties || {};
-    const category = properties.category || '';
-    const placeType = feature.place_type?.[0] || '';
+  // Helper function to calculate distance between two points
+  const calculateDistance = (lon1: number, lat1: number, lon2: number, lat2: number): number => {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+  };
 
-    if (category.includes('monument') || feature.text?.toLowerCase().includes('monumen')) {
-      return 'Bangunan';
-    } else if (category.includes('museum') || feature.text?.toLowerCase().includes('museum')) {
-      return 'Bangunan';
-    } else if (category.includes('mosque') || feature.text?.toLowerCase().includes('masjid')) {
-      return 'Bangunan';
-    } else if (category.includes('church') || feature.text?.toLowerCase().includes('gereja')) {
-      return 'Bangunan';
-    } else if (category.includes('palace') || feature.text?.toLowerCase().includes('istana')) {
-      return 'Bangunan';
-    } else if (placeType === 'poi') {
-      return 'Situs';
-    } else {
-      return 'Kawasan';
+  const deg2rad = (deg: number): number => {
+    return deg * (Math.PI / 180);
+  };
+
+  // Function to search places around a specific location
+  const searchPlacesAroundLocation = async (lng: number, lat: number, radius = 20000) => {
+    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN_HERE';
+
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/v4/${TILESET_ID}/tilequery/${lng},${lat}.json?` +
+        `access_token=${accessToken}&` +
+        `radius=${radius}&` +
+        `limit=50`
+      );
+
+      const data = await response.json();
+
+      if (data.features && data.features.length > 0) {
+        const newPlaces = data.features.map((feature: any, index: number) => {
+          const props = feature.properties;
+          const coords = feature.geometry.coordinates;
+          const visitors = Math.floor(Math.random() * 500) + 50;
+
+          return {
+            id: feature.id || index + 1,
+            name: props.nama || 'Destinasi Wisata',
+            category: props.jenis || 'Situs',
+            location: `${props.kota || ''}, ${props.provinsi || 'Indonesia'}`.trim(),
+            description: props.deskripsi && props.deskripsi !== '-'
+              ? props.deskripsi
+              : `${props.nama} adalah salah satu cagar budaya yang terdaftar di ${props.kota || 'Indonesia'}. Kode: ${props.kode || '-'}`,
+            visitors: `${visitors} orang pernah ke sini`,
+            image: getImageFromCategory(props.jenis || 'Situs'),
+            coordinates: coords as [number, number]
+          };
+        });
+
+        setAllPlaces(newPlaces);
+        setPlaces(selectedCategory ? newPlaces.filter((p: any) => p.category === selectedCategory) : newPlaces);
+      }
+    } catch (error) {
+      console.error('Error searching places around location:', error);
     }
   };
 
@@ -169,7 +265,8 @@ export default function MapBox3D() {
       'Bangunan': 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=400&h=300&fit=crop',
       'Situs': 'https://images.unsplash.com/photo-1548013146-72479768bada?w=400&h=300&fit=crop',
       'Kawasan': 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400&h=300&fit=crop',
-      'Struktur': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=400&h=300&fit=crop'
+      'Struktur': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=400&h=300&fit=crop',
+      'Benda': 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=400&h=300&fit=crop'
     };
     return images[category] || 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=400&h=300&fit=crop';
   };
