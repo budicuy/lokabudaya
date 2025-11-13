@@ -183,12 +183,12 @@ export default function MapBox3D() {
     if (map.current) return;
 
     const script = document.createElement('script');
-    script.src = 'https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js';
+    script.src = 'https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.js';
     script.async = true;
     document.head.appendChild(script);
 
     const link = document.createElement('link');
-    link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css';
+    link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.css';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
@@ -198,7 +198,7 @@ export default function MapBox3D() {
 
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
+        style: 'mapbox://styles/mapbox/standard',
         center: [106.8272, -6.1751],
         zoom: 16,
         pitch: 60,
@@ -206,21 +206,13 @@ export default function MapBox3D() {
         antialias: true
       });
 
-      map.current.on('load', () => {
-        map.current.addLayer({
-          id: '3d-buildings',
-          source: 'composite',
-          'source-layer': 'building',
-          filter: ['==', 'extrude', 'true'],
-          type: 'fill-extrusion',
-          minzoom: 15,
-          paint: {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'height']],
-            'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'min_height']],
-            'fill-extrusion-opacity': 0.6
-          }
-        });
+      map.current.on('style.load', () => {
+        // Mapbox Standard Style uses different configuration
+        // Enable 3D buildings through style configuration
+        if (map.current.getLayer('building-3d')) {
+          // Buildings are already part of the standard style
+          console.log('3D buildings enabled in Standard Style');
+        }
 
         setLoaded(true);
       });
