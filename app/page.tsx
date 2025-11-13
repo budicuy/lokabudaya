@@ -1,15 +1,32 @@
+
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import { Search, Map, MapPin, Settings, Moon, X, Plus, Minus, Layers, Building2, Landmark, MapPinned, Grid3x3 } from 'lucide-react';
 
+interface Place {
+  id: number;
+  name: string;
+  category: string;
+  location: string;
+  description: string;
+  visitors: string;
+  image: string;
+}
+
+declare global {
+  interface Window {
+    mapboxgl: any;
+  }
+}
+
 export default function MapBox3D() {
-  const mapContainer = useRef(null);
-  const map = useRef(null);
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<any>(null);
   const [loaded, setLoaded] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   const places = [
     {
