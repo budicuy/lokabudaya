@@ -27,39 +27,157 @@ export default function MapBox3D() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [places, setPlaces] = useState<(Place & { coordinates: [number, number] })[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [allPlaces, setAllPlaces] = useState<(Place & { coordinates: [number, number] })[]>([]);
+  const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
 
-  const places = [
-    {
-      id: 1,
-      name: 'Monumen Nasional',
-      category: 'Bangunan',
-      location: 'Jakarta, Indonesia',
-      description: 'Monumen Nasional yang disingkat dengan Monas atau Tugu Monas adalah monumen peringatan setinggi 132 meter, terletak tepat di tengah',
-      visitors: '150 orang pernah ke sini',
-      image: 'https://placehold.co/400x300',
-      coordinates: [106.8272, -6.1751]
-    },
-    {
-      id: 2,
-      name: 'Istana Merdeka',
-      category: 'Bangunan',
-      location: 'Jakarta, Indonesia',
-      description: 'Istana Merdeka adalah salah satu dari enam istana kepresidenan Indonesia yang terletak di Jakarta Pusat',
-      visitors: '230 orang pernah ke sini',
-      image: 'https://placehold.co/400x300',
-      coordinates: [106.8229, -6.1701]
-    },
-    {
-      id: 3,
-      name: 'Masjid Istiqlal',
-      category: 'Bangunan',
-      location: 'Jakarta, Indonesia',
-      description: 'Masjid Istiqlal adalah masjid nasional negara Indonesia yang terletak di pusat Jakarta',
-      visitors: '320 orang pernah ke sini',
-      image: 'https://placehold.co/400x300',
-      coordinates: [106.8317, -6.1702]
+  // Function to search places using Mapbox Geocoding API
+  const searchPlaces = async (query: string) => {
+    if (!query.trim()) {
+      // Load default places for Jakarta
+      loadDefaultPlaces();
+      return;
     }
-  ];
+
+    setIsSearching(true);
+    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN_HERE';
+
+    try {
+      // Search for landmarks, monuments, buildings in Jakarta
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
+        `access_token=${accessToken}&` +
+        `country=ID&` +
+        `proximity=106.8272,-6.1751&` +
+        `types=poi,address,place&` +
+        `limit=20&` +
+        `language=id`
+      );
+
+      const data = await response.json();
+
+      if (data.features && data.features.length > 0) {
+        const newPlaces = data.features.map((feature: any, index: number) => {
+          const category = getCategoryFromFeature(feature);
+          const visitors = Math.floor(Math.random() * 500) + 50;
+
+          return {
+            id: index + 1,
+            name: feature.text || feature.place_name.split(',')[0],
+            category: category,
+            location: feature.place_name.split(',').slice(1).join(',').trim() || 'Jakarta, Indonesia',
+            description: feature.properties?.address || `${feature.text} adalah salah satu tempat menarik di ${feature.place_name.split(',')[1] || 'Jakarta'}`,
+            visitors: `${visitors} orang pernah ke sini`,
+            image: getImageFromCategory(category),
+            coordinates: feature.center as [number, number]
+          };
+        });
+
+        setAllPlaces(newPlaces);
+        setPlaces(newPlaces);
+      }
+    } catch (error) {
+      console.error('Error searching places:', error);
+      loadDefaultPlaces();
+    } finally {
+      setIsSearching(false);
+    }
+  };  // Load default places for Jakarta monuments and landmarks
+  const loadDefaultPlaces = async () => {
+    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'YOUR_MAPBOX_TOKEN_HERE';
+    const landmarks = [
+      'Monumen Nasional Jakarta',
+      'Istana Merdeka Jakarta',
+      'Masjid Istiqlal Jakarta',
+      'Gereja Katedral Jakarta',
+      'Museum Nasional Jakarta',
+      'Taman Mini Indonesia Indah',
+      'Kota Tua Jakarta',
+      'Ancol Jakarta',
+      'Bundaran HI Jakarta',
+      'Gelora Bung Karno'
+    ];
+
+    const allPlaces: (Place & { coordinates: [number, number] })[] = [];
+
+    for (const landmark of landmarks) {
+      try {
+        const response = await fetch(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(landmark)}.json?` +
+          `access_token=${accessToken}&` +
+          `country=ID&` +
+          `limit=1&` +
+          `language=id`
+        );
+
+        const data = await response.json();
+
+        if (data.features && data.features.length > 0) {
+          const feature = data.features[0];
+          const category = getCategoryFromFeature(feature);
+          const visitors = Math.floor(Math.random() * 500) + 50;
+
+          allPlaces.push({
+            id: allPlaces.length + 1,
+            name: feature.text || feature.place_name.split(',')[0],
+            category: category,
+            location: feature.place_name.split(',').slice(1).join(',').trim() || 'Jakarta, Indonesia',
+            description: `${feature.text} adalah salah satu landmark bersejarah dan ikon penting di Jakarta yang wajib dikunjungi`,
+            visitors: `${visitors} orang pernah ke sini`,
+            image: getImageFromCategory(category),
+            coordinates: feature.center as [number, number]
+          });
+        }
+      } catch (error) {
+        console.error(`Error loading ${landmark}:`, error);
+      }
+    }
+
+    setAllPlaces(allPlaces);
+    setPlaces(allPlaces);
+  };
+
+  // Helper function to determine category from feature
+  const getCategoryFromFeature = (feature: any): string => {
+    const properties = feature.properties || {};
+    const category = properties.category || '';
+    const placeType = feature.place_type?.[0] || '';
+
+    if (category.includes('monument') || feature.text?.toLowerCase().includes('monumen')) {
+      return 'Bangunan';
+    } else if (category.includes('museum') || feature.text?.toLowerCase().includes('museum')) {
+      return 'Bangunan';
+    } else if (category.includes('mosque') || feature.text?.toLowerCase().includes('masjid')) {
+      return 'Bangunan';
+    } else if (category.includes('church') || feature.text?.toLowerCase().includes('gereja')) {
+      return 'Bangunan';
+    } else if (category.includes('palace') || feature.text?.toLowerCase().includes('istana')) {
+      return 'Bangunan';
+    } else if (placeType === 'poi') {
+      return 'Situs';
+    } else {
+      return 'Kawasan';
+    }
+  };
+
+  // Helper function to get image based on category
+  const getImageFromCategory = (category: string): string => {
+    const images: { [key: string]: string } = {
+      'Bangunan': 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=400&h=300&fit=crop',
+      'Situs': 'https://images.unsplash.com/photo-1548013146-72479768bada?w=400&h=300&fit=crop',
+      'Kawasan': 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400&h=300&fit=crop',
+      'Struktur': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=400&h=300&fit=crop'
+    };
+    return images[category] || 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=400&h=300&fit=crop';
+  };
+
+  // Load default places on mount
+  useEffect(() => {
+    loadDefaultPlaces();
+  }, []);
 
   useEffect(() => {
     if (map.current) return;
@@ -116,6 +234,122 @@ export default function MapBox3D() {
   const zoomIn = () => map.current?.zoomIn();
   const zoomOut = () => map.current?.zoomOut();
 
+  const handlePlaceClick = (place: Place & { coordinates: [number, number] }) => {
+    setSelectedPlace(place);
+    if (map.current) {
+      map.current.flyTo({
+        center: place.coordinates,
+        zoom: 17,
+        pitch: 60,
+        bearing: -17.6,
+        duration: 2000
+      });
+    }
+  };
+
+  // Update popup position when map moves or selectedPlace changes
+  useEffect(() => {
+    if (!map.current || !selectedPlace) {
+      setPopupPosition(null);
+      return;
+    }
+
+    const updatePopupPosition = () => {
+      if (selectedPlace && map.current && 'coordinates' in selectedPlace) {
+        const point = map.current.project(selectedPlace.coordinates);
+        setPopupPosition({ x: point.x, y: point.y });
+      }
+    };
+
+    // Update position on map move
+    map.current.on('move', updatePopupPosition);
+    map.current.on('zoom', updatePopupPosition);
+    map.current.on('rotate', updatePopupPosition);
+    map.current.on('pitch', updatePopupPosition);
+
+    // Initial position
+    updatePopupPosition();
+
+    return () => {
+      if (map.current) {
+        map.current.off('move', updatePopupPosition);
+        map.current.off('zoom', updatePopupPosition);
+        map.current.off('rotate', updatePopupPosition);
+        map.current.off('pitch', updatePopupPosition);
+      }
+    };
+  }, [selectedPlace]);
+
+  // Add markers after map is loaded
+  useEffect(() => {
+    if (!loaded || !map.current) return;
+
+    const mapboxgl = window.mapboxgl;
+    const markers: any[] = [];
+
+    places.forEach(place => {
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.style.width = '30px';
+      el.style.height = '30px';
+      el.style.backgroundImage = 'url(https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png)';
+      el.style.backgroundSize = 'cover';
+      el.style.cursor = 'pointer';
+
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat(place.coordinates)
+        .addTo(map.current);
+
+      markers.push(marker);
+
+      el.addEventListener('click', () => {
+        handlePlaceClick(place);
+      });
+    });
+
+    return () => {
+      markers.forEach(marker => marker.remove());
+    };
+  }, [loaded, places]);
+
+  // Handle search input
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (!value.trim()) {
+      loadDefaultPlaces();
+    }
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    searchPlaces(searchQuery);
+  };
+
+  // Debounced search effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchQuery) {
+        searchPlaces(searchQuery);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
+
+  // Filter places by category
+  useEffect(() => {
+    if (selectedCategory) {
+      setPlaces(allPlaces.filter(place => place.category === selectedCategory));
+    } else {
+      setPlaces(allPlaces);
+    }
+  }, [selectedCategory, allPlaces]);
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategory(selectedCategory === category ? null : category);
+  };
+
   return (
     <div className="w-full h-screen flex flex-col bg-white">
       <nav className="h-14 bg-white flex items-center justify-between px-4 z-20 border-b-2 border-slate-300">
@@ -165,53 +399,69 @@ export default function MapBox3D() {
         {searchOpen && (
           <div className="w-80 bg-white flex flex-col z-10 shadow-lg">
             <div className="p-4">
-              <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
+              <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
                 <Search className="w-4 h-4 text-gray-500" />
                 <input
                   type="text"
                   placeholder="Tempat yang ingin dikunjungi.."
                   className="bg-transparent outline-none text-sm flex-1"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                 />
-                <button onClick={() => setSearchOpen(false)}>
+                <button type="button" onClick={() => setSearchOpen(false)}>
                   <X className="w-4 h-4 text-gray-500" />
                 </button>
-                <button onClick={() => setFilterOpen(!filterOpen)} className="p-1 hover:bg-gray-200 rounded">
+                <button type="button" onClick={() => setFilterOpen(!filterOpen)} className="p-1 hover:bg-gray-200 rounded">
                   <svg className="w-4 h-4 text-yellow-600" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M3 3h14M3 7h10M3 11h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                   </svg>
                 </button>
-              </div>
+              </form>
             </div>
 
-            <div className="px-4 py-2 text-xs text-gray-500">
-              Hasil Pencarian (20)
+            <div className="px-4 py-2 text-xs text-gray-500 flex items-center justify-between">
+              <span>Hasil Pencarian ({places.length})</span>
+              {isSearching && <span className="text-yellow-600">Mencari...</span>}
             </div>
 
             <div className="flex-1 overflow-y-auto">
-              {places.map(place => (
-                <div
-                  key={place.id}
-                  onClick={() => setSelectedPlace(place)}
-                  className="p-4 hover:bg-gray-50 cursor-pointer"
-                >
-                  <div className="flex gap-3">
-                    <img src={place.image} alt={place.name} className="w-32 h-24 rounded-lg object-cover" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1 text-xs text-gray-600 mb-1">
-                        <Building2 className="w-3 h-3" />
-                        <span>{place.category}</span>
-                      </div>
-                      <h3 className="font-semibold text-sm mb-1">{place.name}</h3>
-                      <p className="text-xs text-gray-600 mb-2">{place.location}</p>
-                      <p className="text-xs text-gray-500 line-clamp-2">{place.description}</p>
-                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-2">
-                        <MapPin className="w-3 h-3" />
-                        <span>{place.visitors}</span>
+              {isSearching ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-600 mx-auto mb-2"></div>
+                    <p className="text-sm text-gray-500">Mencari tempat...</p>
+                  </div>
+                </div>
+              ) : places.length === 0 ? (
+                <div className="flex items-center justify-center py-8">
+                  <p className="text-sm text-gray-500">Tidak ada hasil ditemukan</p>
+                </div>
+              ) : (
+                places.map(place => (
+                  <div
+                    key={place.id}
+                    onClick={() => handlePlaceClick(place)}
+                    className="p-4 hover:bg-gray-50 cursor-pointer"
+                  >
+                    <div className="flex gap-3">
+                      <img src={place.image} alt={place.name} className="w-32 h-24 rounded-lg object-cover" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1 text-xs text-gray-600 mb-1">
+                          <Building2 className="w-3 h-3" />
+                          <span>{place.category}</span>
+                        </div>
+                        <h3 className="font-semibold text-sm mb-1">{place.name}</h3>
+                        <p className="text-xs text-gray-600 mb-2">{place.location}</p>
+                        <p className="text-xs text-gray-500 line-clamp-2">{place.description}</p>
+                        <div className="flex items-center gap-1 text-xs text-gray-500 mt-2">
+                          <MapPin className="w-3 h-3" />
+                          <span>{place.visitors}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         )}
@@ -247,31 +497,61 @@ export default function MapBox3D() {
             <div className="mb-4">
               <h4 className="text-sm font-medium mb-2">Kategori</h4>
               <div className="flex flex-wrap gap-2">
-                <button className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs flex items-center gap-1">
-                  <Building2 className="w-3 h-3" />
-                  Benda
-                </button>
-                <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs flex items-center gap-1">
+                <button
+                  onClick={() => toggleCategory('Bangunan')}
+                  className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 ${selectedCategory === 'Bangunan'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-700'
+                    }`}
+                >
                   <Landmark className="w-3 h-3" />
                   Bangunan
                 </button>
-                <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs flex items-center gap-1">
+                <button
+                  onClick={() => toggleCategory('Situs')}
+                  className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 ${selectedCategory === 'Situs'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-700'
+                    }`}
+                >
                   <MapPinned className="w-3 h-3" />
                   Situs
                 </button>
-                <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs flex items-center gap-1">
+                <button
+                  onClick={() => toggleCategory('Kawasan')}
+                  className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 ${selectedCategory === 'Kawasan'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-700'
+                    }`}
+                >
+                  Kawasan
+                </button>
+                <button
+                  onClick={() => toggleCategory('Struktur')}
+                  className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 ${selectedCategory === 'Struktur'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-700'
+                    }`}
+                >
                   <Grid3x3 className="w-3 h-3" />
                   Struktur
-                </button>
-                <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs">
-                  Kawasan
                 </button>
               </div>
             </div>
 
             <div className="flex gap-2">
-              <button className="flex-1 px-4 py-2 rounded-lg text-sm">Atur ulang</button>
-              <button className="flex-1 px-4 py-2 bg-gray-800 text-white rounded-lg text-sm">Terapkan</button>
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="flex-1 px-4 py-2 rounded-lg text-sm hover:bg-gray-100"
+              >
+                Atur ulang
+              </button>
+              <button
+                onClick={() => setFilterOpen(false)}
+                className="flex-1 px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-900"
+              >
+                Terapkan
+              </button>
             </div>
           </div>
         )}
@@ -285,34 +565,56 @@ export default function MapBox3D() {
             </div>
           )}
 
-          {selectedPlace && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full w-96 bg-white rounded-lg shadow-2xl overflow-hidden">
-              <button
-                onClick={() => setSelectedPlace(null)}
-                className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center z-10"
-              >
-                <X className="w-4 h-4" />
-              </button>
-              <div className="relative">
-                <div className="text-xs bg-white px-2 py-1 rounded absolute top-2 left-2 flex items-center gap-1">
-                  <Landmark className="w-3 h-3" />
-                  {selectedPlace.category}
-                </div>
-                <div className="text-xs bg-white px-2 py-1 rounded absolute top-2 right-2 flex items-center gap-1">
-                  <MapPin className="w-3 h-3" />
-                  150+ Kunjungan
-                </div>
-                <img src={selectedPlace.image} alt={selectedPlace.name} className="w-full h-48 object-cover" />
-              </div>
-              <div className="p-4">
-                <h3 className="font-bold text-lg mb-1">{selectedPlace.name}</h3>
-                <p className="text-sm text-gray-600 mb-3">{selectedPlace.location}</p>
-                <p className="text-sm text-gray-700 mb-4">{selectedPlace.description}</p>
-                <button className="w-full bg-gray-800 text-white py-3 rounded-lg flex items-center justify-center gap-2">
-                  Lihat Detail
-                  <span>→</span>
+          {selectedPlace && popupPosition && (
+            <div
+              className="absolute w-96 bg-white rounded-lg shadow-2xl z-20"
+              style={{
+                left: `${popupPosition.x}px`,
+                top: `${popupPosition.y}px`,
+                transform: 'translate(-50%, calc(-100% - 20px))',
+                pointerEvents: 'auto'
+              }}
+            >
+              <div className="overflow-hidden rounded-lg">
+                <button
+                  onClick={() => setSelectedPlace(null)}
+                  className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center z-10 hover:bg-gray-100"
+                >
+                  <X className="w-4 h-4" />
                 </button>
+                <div className="relative">
+                  <div className="text-xs bg-white px-2 py-1 rounded absolute top-2 left-2 flex items-center gap-1 shadow">
+                    <Landmark className="w-3 h-3" />
+                    {selectedPlace.category}
+                  </div>
+                  <div className="text-xs bg-white px-2 py-1 rounded absolute top-2 right-12 flex items-center gap-1 shadow">
+                    <MapPin className="w-3 h-3" />
+                    150+ Kunjungan
+                  </div>
+                  <img src={selectedPlace.image} alt={selectedPlace.name} className="w-full h-48 object-cover" />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-lg mb-1">{selectedPlace.name}</h3>
+                  <p className="text-sm text-gray-600 mb-3">{selectedPlace.location}</p>
+                  <p className="text-sm text-gray-700 mb-4">{selectedPlace.description}</p>
+                  <button className="w-full bg-gray-800 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-900">
+                    Lihat Detail
+                    <span>→</span>
+                  </button>
+                </div>
               </div>
+              {/* Arrow pointing down */}
+              <div
+                className="absolute left-1/2 w-0 h-0"
+                style={{
+                  bottom: '-10px',
+                  transform: 'translateX(-50%)',
+                  borderLeft: '10px solid transparent',
+                  borderRight: '10px solid transparent',
+                  borderTop: '10px solid white',
+                  filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.1))'
+                }}
+              ></div>
             </div>
           )}
 
@@ -336,6 +638,6 @@ export default function MapBox3D() {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
