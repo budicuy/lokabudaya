@@ -36,25 +36,28 @@ export default function MapBox3D() {
       location: 'Jakarta, Indonesia',
       description: 'Monumen Nasional yang disingkat dengan Monas atau Tugu Monas adalah monumen peringatan setinggi 132 meter, terletak tepat di tengah',
       visitors: '150 orang pernah ke sini',
-      image: 'https://placehold.co/400x300'
+      image: 'https://placehold.co/400x300',
+      coordinates: [106.8272, -6.1751]
     },
     {
       id: 2,
-      name: 'Monumen Nasional',
+      name: 'Istana Merdeka',
       category: 'Bangunan',
       location: 'Jakarta, Indonesia',
-      description: 'Monumen Nasional yang disingkat dengan Monas atau Tugu Monas adalah monumen peringatan setinggi 132 meter, terletak tepat di tengah',
-      visitors: '150 orang pernah ke sini',
-      image: 'https://placehold.co/400x300'
+      description: 'Istana Merdeka adalah salah satu dari enam istana kepresidenan Indonesia yang terletak di Jakarta Pusat',
+      visitors: '230 orang pernah ke sini',
+      image: 'https://placehold.co/400x300',
+      coordinates: [106.8229, -6.1701]
     },
     {
       id: 3,
-      name: 'Monumen Nasional',
+      name: 'Masjid Istiqlal',
       category: 'Bangunan',
       location: 'Jakarta, Indonesia',
-      description: 'Monumen Nasional yang disingkat dengan Monas atau Tugu Monas adalah monumen peringatan setinggi 132 meter, terletak tepat di tengah',
-      visitors: '150 orang pernah ke sini',
-      image: 'https://placehold.co/400x300'
+      description: 'Masjid Istiqlal adalah masjid nasional negara Indonesia yang terletak di pusat Jakarta',
+      visitors: '320 orang pernah ke sini',
+      image: 'https://placehold.co/400x300',
+      coordinates: [106.8317, -6.1702]
     }
   ];
 
