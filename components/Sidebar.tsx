@@ -1,4 +1,4 @@
-import {Map as MapIcon, Route, MessageCircle, Trash2, Settings, Moon} from "lucide-react";
+import {Map as MapIcon, MessageCircle, Moon, Route, Settings, Trash2} from "lucide-react";
 import Image from "next/image";
 
 interface SidebarProps {

@@ -1,6 +1,6 @@
 import {Camera, Landmark, MapPin, MoreVertical, Play, Users, X} from "lucide-react";
 import Image from "next/image";
-import {useState, useRef} from "react";
+import {useRef, useState} from "react";
 import {STATIC_PLACES} from "@/data/places";
 import type {Place} from "@/types";
 
@@ -99,11 +99,13 @@ export const PlaceDetail = ({place, onClose}: PlaceDetailProps) => {
 					{uploadedMedia.length > 0 && (
 						<div className="grid grid-cols-2 gap-2 mb-6">
 							{uploadedMedia.map((media, idx) => (
-								<div key={`media-${idx}`} className="relative aspect-video rounded-lg overflow-hidden group bg-gray-100">
+								<div key={media.src} className="relative aspect-video rounded-lg overflow-hidden group bg-gray-100">
 									{media.type === "image" ? (
 										<Image src={media.src} alt="Preview" fill className="object-cover" />
 									) : (
-										<video src={media.src} className="w-full h-full object-cover" />
+										<video src={media.src} className="w-full h-full object-cover">
+											<track kind="captions" src="" label="No captions" />
+										</video>
 									)}
 									<button
 										type="button"

@@ -3,13 +3,13 @@
 import {useEffect, useRef, useState} from "react";
 import {createRoot} from "react-dom/client";
 import {FilterPanel} from "@/components/FilterPanel";
+import {LayerModal} from "@/components/LayerModal";
 import {MapControls} from "@/components/MapControls";
 import {MapPopup} from "@/components/MapPopup";
 import {Navbar} from "@/components/Navbar";
 import {PlaceDetail} from "@/components/PlaceDetail";
 import {SearchPanel} from "@/components/SearchPanel";
 import {Sidebar} from "@/components/Sidebar";
-import {LayerModal} from "@/components/LayerModal";
 import {useMapbox} from "@/hooks/useMapbox";
 import {usePlacesFilter} from "@/hooks/usePlacesFilter";
 import type {Place} from "@/types";
