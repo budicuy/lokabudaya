@@ -28,18 +28,20 @@ export const SearchPanel = ({
 			<div className="p-4">
 				<form onSubmit={handleSearchSubmit} className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
 					<Search className="w-4 h-4 text-gray-500" />
-					<input
-						type="text"
-						placeholder="Tempat yang ingin dikunjungi.."
-						className="bg-transparent outline-none text-sm flex-1"
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
-					/>
-					{searchQuery && (
-						<button type="button" onClick={() => setSearchQuery("")}>
-							<X className="w-4 h-4 text-gray-400" />
-						</button>
-					)}
+					<div className="flex-1 flex items-center relative">
+						<input
+							type="text"
+							placeholder="Tempat yang ingin dikunjungi.."
+							className="bg-transparent outline-none text-sm w-full pr-6"
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+						/>
+						{searchQuery && (
+							<button type="button" onClick={() => setSearchQuery("")} className="absolute right-0">
+								<X className="w-4 h-4 text-gray-400" />
+							</button>
+						)}
+					</div>
 					<div className="w-px h-4 bg-gray-300 mx-1" />
 					<button
 						type="button"
