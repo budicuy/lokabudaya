@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-/* Mapbox Popup Custom Styles */
-.mapboxgl-popup {
-	/* Let Mapbox handle maxWidth from config */
-}
 
 .mapboxgl-popup-content {
 	padding: 0 !important;

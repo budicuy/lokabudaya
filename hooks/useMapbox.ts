@@ -41,6 +41,12 @@ export const useMapbox = () => {
 			});
 
 			map.current.on("style.load", () => {
+				map.current.setConfig("basemap", {
+					showPointOfInterestLabels: false,
+					showPlaceLabels: false,
+					showRoadLabels: false,
+					showTransitLabels: false,
+				});
 				setLoaded(true);
 			});
 		};
