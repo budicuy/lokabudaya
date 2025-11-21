@@ -3,6 +3,7 @@
 import {useEffect, useRef, useState} from "react";
 import {createRoot} from "react-dom/client";
 import {FilterPanel} from "@/components/FilterPanel";
+import {JejakBudaya} from "@/components/JejakBudaya";
 import {LayerModal} from "@/components/LayerModal";
 import {MapControls} from "@/components/MapControls";
 import {MapPopup} from "@/components/MapPopup";
@@ -36,6 +37,7 @@ export default function MapBox3D() {
 	const [searchOpen, setSearchOpen] = useState(false);
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [layerOpen, setLayerOpen] = useState(false);
+	const [jejakBudayaOpen, setJejakBudayaOpen] = useState(false);
 	const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/standard");
 	const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 	const markersRef = useRef<Map<number, any>>(new Map());
@@ -116,7 +118,12 @@ export default function MapBox3D() {
 			<Navbar />
 
 			<div className="flex-1 flex relative overflow-hidden">
-				<Sidebar searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
+				<Sidebar
+					searchOpen={searchOpen}
+					setSearchOpen={setSearchOpen}
+					jejakBudayaOpen={jejakBudayaOpen}
+					setJejakBudayaOpen={setJejakBudayaOpen}
+				/>
 
 				{searchOpen && (
 					<SearchPanel
@@ -137,6 +144,8 @@ export default function MapBox3D() {
 						setFilterOpen={setFilterOpen}
 					/>
 				)}
+
+				{jejakBudayaOpen && <JejakBudaya places={filteredPlaces} onPlaceClick={handlePlaceClick} />}
 
 				<div className="flex-1 relative">
 					<div ref={mapContainer} className="w-full h-full" />
