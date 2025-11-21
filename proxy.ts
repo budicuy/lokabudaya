@@ -1,1 +1,2 @@
-export {auth as middleware} from "@/lib/auth";
+// Ini adalah alternatife Middleware karena nextjs 15 menggunakan proxy dan tidak lagi menggunakan middleware
+export function proxy() {}
