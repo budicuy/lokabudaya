@@ -36,7 +36,6 @@ export default function MapBox3D() {
 	const [searchOpen, setSearchOpen] = useState(false);
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [layerOpen, setLayerOpen] = useState(false);
-	const [selectedCategories, setSelectedCategories] = useState<string[]>(["Benda"]);
 	const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/standard");
 	const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 	const markersRef = useRef<Map<number, any>>(new Map());
@@ -62,10 +61,6 @@ export default function MapBox3D() {
 				popup.addTo(map.current);
 			}
 		}
-	};
-
-	const handleCategoryToggle = (category: string) => {
-		setSelectedCategories((prev) => (prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]));
 	};
 
 	const handleMapStyleChange = (style: string) => {
@@ -159,8 +154,6 @@ export default function MapBox3D() {
 					{layerOpen && (
 						<LayerModal
 							isOpen={layerOpen}
-							selectedCategories={selectedCategories}
-							onCategoryToggle={handleCategoryToggle}
 							selectedMapStyle={mapStyle}
 							onMapStyleChange={handleMapStyleChange}
 							showPlaceLabels={showPlaceLabels}
