@@ -42,10 +42,10 @@ export default function MapBox3D() {
 	const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 	const markersRef = useRef<Map<number, any>>(new Map());
 
-	const handlePlaceClick = (place: Place) => {
-		setSelectedPlace(place);
+	const flyToPlace = (place: Place) => {
 		// Navigate map to the place coordinates
 		if (map.current) {
+			map.current.resize();
 			map.current.flyTo({center: place.coordinates, zoom: 16, duration: 1500, essential: true});
 		}
 		// Close all popups first
@@ -63,6 +63,12 @@ export default function MapBox3D() {
 				popup.addTo(map.current);
 			}
 		}
+	};
+
+	const handlePlaceClick = (place: Place) => {
+		setSelectedPlace(place);
+		setFilterOpen(false);
+		flyToPlace(place);
 	};
 
 	const handleMapStyleChange = (style: string) => {
@@ -120,9 +126,18 @@ export default function MapBox3D() {
 			<div className="flex-1 flex relative overflow-hidden">
 				<Sidebar
 					searchOpen={searchOpen}
-					setSearchOpen={setSearchOpen}
+					setSearchOpen={(open) => {
+						setSearchOpen(open);
+						if (open) setJejakBudayaOpen(false);
+					}}
 					jejakBudayaOpen={jejakBudayaOpen}
-					setJejakBudayaOpen={setJejakBudayaOpen}
+					setJejakBudayaOpen={(open) => {
+						setJejakBudayaOpen(open);
+						if (open) {
+							setSearchOpen(false);
+							setFilterOpen(false);
+						}
+					}}
 				/>
 
 				{searchOpen && (
@@ -130,22 +145,16 @@ export default function MapBox3D() {
 						searchQuery={searchQuery}
 						setSearchQuery={setSearchQuery}
 						filterOpen={filterOpen}
-						setFilterOpen={setFilterOpen}
+						setFilterOpen={(open) => {
+							setFilterOpen(open);
+							if (open) setSelectedPlace(null);
+						}}
 						filteredPlaces={filteredPlaces}
 						handlePlaceClick={handlePlaceClick}
 					/>
 				)}
 
-				{filterOpen && (
-					<FilterPanel
-						selectedCategory={selectedCategory}
-						toggleCategory={toggleCategory}
-						setSelectedCategory={setSelectedCategory}
-						setFilterOpen={setFilterOpen}
-					/>
-				)}
-
-				{jejakBudayaOpen && <JejakBudaya places={filteredPlaces} onPlaceClick={handlePlaceClick} />}
+				{jejakBudayaOpen && <JejakBudaya places={filteredPlaces} onPlaceClick={flyToPlace} />}
 
 				<div className="flex-1 relative">
 					<div ref={mapContainer} className="w-full h-full" />
@@ -176,6 +185,15 @@ export default function MapBox3D() {
 						/>
 					)}
 				</div>
+
+				{filterOpen && (
+					<FilterPanel
+						selectedCategory={selectedCategory}
+						toggleCategory={toggleCategory}
+						setSelectedCategory={setSelectedCategory}
+						setFilterOpen={setFilterOpen}
+					/>
+				)}
 			</div>
 		</div>
 	);

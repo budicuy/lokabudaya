@@ -21,7 +21,9 @@ export const JejakBudaya = ({places, onPlaceClick}: JejakBudayaProps) => {
 
 	const handlePlaceSelect = (place: Place) => {
 		setSelectedPlace(place);
-		onPlaceClick(place);
+		setTimeout(() => {
+			onPlaceClick(place);
+		}, 100);
 	};
 
 	return (
@@ -47,28 +49,25 @@ export const JejakBudaya = ({places, onPlaceClick}: JejakBudayaProps) => {
 					</div>
 				</div>
 
-				{/* Tabs */}
-				<div className="pb-2">
-					<div className="flex justify-between">
-						{/* Visit Count */}
-						<div className="px-4 py-2">
-							<p className="text-sm text-gray-600">{totalVisits} Kunjungan</p>
-						</div>
-						<div className="flex gap-1 text-sm items-center px-2">
-							Berdasarkan
+				{/* Tabs & Count Header */}
+				<div className="px-4 py-3 flex items-center justify-between border-b border-gray-100">
+					<p className="text-xs text-gray-500 font-medium">{totalVisits} Kunjungan</p>
+					<div className="flex items-center gap-2">
+						<span className="text-xs text-gray-400">Berdasarkan</span>
+						<div className="flex bg-gray-100 p-1 rounded-lg">
 							<button
 								type="button"
 								onClick={() => setActiveTab("tempat")}
-								className={`px-3 py-1 rounded ${
-									activeTab === "tempat" ? "bg-yellow-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+								className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+									activeTab === "tempat" ? "bg-[#5C4033] text-white shadow-sm" : "text-gray-500 hover:text-gray-700"
 								}`}>
 								Tempat
 							</button>
 							<button
 								type="button"
 								onClick={() => setActiveTab("tanggal")}
-								className={`px-3 py-1 rounded ${
-									activeTab === "tanggal" ? "bg-yellow-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+								className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+									activeTab === "tanggal" ? "bg-[#5C4033] text-white shadow-sm" : "text-gray-500 hover:text-gray-700"
 								}`}>
 								Tanggal
 							</button>
@@ -77,55 +76,68 @@ export const JejakBudaya = ({places, onPlaceClick}: JejakBudayaProps) => {
 				</div>
 
 				{/* Places List */}
-				<div className="flex-1 overflow-y-auto">
+				<div className="flex-1 overflow-y-auto bg-gray-50 p-4 space-y-4">
 					{filteredPlaces.map((place) => (
-						<button
+						<div
 							key={place.id}
-							type="button"
 							onClick={() => handlePlaceSelect(place)}
-							className={`w-full p-4 border-b border-gray-200 hover:bg-gray-50 text-left transition-colors ${
-								selectedPlace?.id === place.id ? "bg-yellow-50" : ""
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									handlePlaceSelect(place);
+								}
+							}}
+							tabIndex={0}
+							className={`w-full bg-white rounded-2xl border p-4 cursor-pointer transition-all hover:shadow-md ${
+								selectedPlace?.id === place.id ? "border-yellow-500 ring-1 ring-yellow-500" : "border-gray-200"
 							}`}>
-							{/* Category Badge */}
-							<div className="flex items-center gap-2 mb-2">
-								<Building2 className="w-4 h-4 text-gray-600" />
-								<span className="text-xs text-gray-600">{place.category}</span>
+							{/* Header Card */}
+							<div className="mb-3">
+								<div className="flex items-center gap-2 mb-1">
+									<Building2 className="w-3.5 h-3.5 text-[#8B5E3C]" />
+									<span className="text-xs font-bold text-[#8B5E3C]">{place.category}</span>
+								</div>
+								<h3 className="text-base font-bold text-gray-900 mb-1">{place.name}</h3>
+								<div className="flex items-center gap-1 text-xs text-gray-500">
+									<MapPin className="w-3.5 h-3.5" />
+									<span>{place.location}</span>
+								</div>
 							</div>
 
-							{/* Place Name */}
-							<h3 className="font-semibold text-gray-800 mb-1">{place.name}</h3>
-
-							{/* Location */}
-							<div className="flex items-center gap-1 text-xs text-gray-500 mb-3">
-								<MapPin className="w-3 h-3" />
-								<span>{place.location}</span>
-							</div>
-
-							{/* Place Image */}
-							<div className="relative w-full h-32 rounded-lg overflow-hidden mb-3">
-								<Image src={place.image} alt={place.name} fill className="object-cover" sizes="320px" />
+							{/* Image */}
+							<div className="relative w-full h-40 rounded-xl overflow-hidden mb-4">
+								<Image
+									src={place.image}
+									alt={place.name}
+									fill
+									className="object-cover"
+									sizes="(max-width: 768px) 100vw, 320px"
+								/>
 							</div>
 
 							{/* Events List */}
 							{place.events.length > 0 && (
-								<div className="space-y-2">
+								<div className="space-y-1">
 									{place.events.slice(0, 3).map((event, index) => (
-										<div key={`${place.id}-${index}`} className="flex items-start justify-between gap-2">
-											<div className="flex-1">
-												<p className="text-xs font-semibold text-gray-800">{event.date}</p>
-												<p className="text-xs text-gray-600 line-clamp-2">{event.description}</p>
+										<div
+											key={`${place.id}-${index}`}
+											className={`flex items-center justify-between gap-3 ${
+												index === 0 ? "bg-gray-100 p-3 rounded-xl mb-2" : "py-3 border-t border-dashed border-gray-200"
+											}`}>
+											<div className="flex-1 min-w-0">
+												<p className="text-sm font-bold text-gray-900">{event.date}</p>
+												<p className="text-xs text-gray-500 truncate">{event.description}</p>
 											</div>
-											<button type="button" className="text-gray-400 hover:text-gray-600 shrink-0" aria-label="Lihat detail event">
-												<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-													<title>Arrow</title>
+											<div className="text-gray-400 shrink-0">
+												<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+													<title>Arrow Right</title>
 													<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
 												</svg>
-											</button>
+											</div>
 										</div>
 									))}
 								</div>
 							)}
-						</button>
+						</div>
 					))}
 				</div>
 			</div>
