@@ -15,7 +15,21 @@ import {usePlacesFilter} from "@/hooks/usePlacesFilter";
 import type {Place} from "@/types";
 
 export default function MapBox3D() {
-	const {mapContainer, map, loaded, zoomIn, zoomOut} = useMapbox();
+	const {
+		mapContainer,
+		map,
+		loaded,
+		zoomIn,
+		zoomOut,
+		showPlaceLabels,
+		showRoadLabels,
+		showPointOfInterestLabels,
+		showTransitLabels,
+		togglePlaceLabels,
+		toggleRoadLabels,
+		togglePointOfInterestLabels,
+		toggleTransitLabels,
+	} = useMapbox();
 	const {searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, filteredPlaces, toggleCategory} =
 		usePlacesFilter();
 
@@ -149,6 +163,14 @@ export default function MapBox3D() {
 							onCategoryToggle={handleCategoryToggle}
 							selectedMapStyle={mapStyle}
 							onMapStyleChange={handleMapStyleChange}
+							showPlaceLabels={showPlaceLabels}
+							showRoadLabels={showRoadLabels}
+							showPointOfInterestLabels={showPointOfInterestLabels}
+							showTransitLabels={showTransitLabels}
+							togglePlaceLabels={togglePlaceLabels}
+							toggleRoadLabels={toggleRoadLabels}
+							togglePointOfInterestLabels={togglePointOfInterestLabels}
+							toggleTransitLabels={toggleTransitLabels}
 						/>
 					)}
 				</div>

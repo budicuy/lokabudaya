@@ -13,6 +13,13 @@ export const useMapbox = () => {
 	const map = useRef<any>(null);
 	const [loaded, setLoaded] = useState(false);
 
+	// State untuk mengontrol visibilitas label
+	const [showPlaceLabels, setShowPlaceLabels] = useState(false);
+	const [showRoadLabels, setShowRoadLabels] = useState(false);
+	const [showPointOfInterestLabels, setShowPointOfInterestLabels] = useState(false);
+	const [showTransitLabels, setShowTransitLabels] = useState(false);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: useEffect hanya dijalankan sekali untuk inisialisasi map
 	useEffect(() => {
 		if (map.current) return;
 
@@ -41,12 +48,7 @@ export const useMapbox = () => {
 			});
 
 			map.current.on("style.load", () => {
-				map.current.setConfig("basemap", {
-					showPointOfInterestLabels: false,
-					showPlaceLabels: false,
-					showRoadLabels: false,
-					showTransitLabels: false,
-				});
+				map.current.setConfig("basemap", {showPointOfInterestLabels, showPlaceLabels, showRoadLabels, showTransitLabels});
 				setLoaded(true);
 			});
 		};
@@ -56,8 +58,52 @@ export const useMapbox = () => {
 		};
 	}, []);
 
+	// Update konfigurasi basemap ketika state label berubah
+	useEffect(() => {
+		if (!map.current || !loaded) return;
+
+		const updateConfig = () => {
+			if (map.current) {
+				map.current.setConfig("basemap", {showPointOfInterestLabels, showPlaceLabels, showRoadLabels, showTransitLabels});
+			}
+		};
+
+		// Update konfigurasi sekarang
+		updateConfig();
+
+		// Tambahkan listener untuk ketika style berubah
+		map.current.on("style.load", updateConfig);
+
+		return () => {
+			if (map.current) {
+				map.current.off("style.load", updateConfig);
+			}
+		};
+	}, [loaded, showPlaceLabels, showRoadLabels, showPointOfInterestLabels, showTransitLabels]);
+
 	const zoomIn = () => map.current?.zoomIn();
 	const zoomOut = () => map.current?.zoomOut();
 
-	return {mapContainer, map, loaded, zoomIn, zoomOut};
+	// Fungsi toggle untuk setiap kategori label
+	const togglePlaceLabels = () => setShowPlaceLabels((prev) => !prev);
+	const toggleRoadLabels = () => setShowRoadLabels((prev) => !prev);
+	const togglePointOfInterestLabels = () => setShowPointOfInterestLabels((prev) => !prev);
+	const toggleTransitLabels = () => setShowTransitLabels((prev) => !prev);
+
+	return {
+		mapContainer,
+		map,
+		loaded,
+		zoomIn,
+		zoomOut,
+		// Layer control
+		showPlaceLabels,
+		showRoadLabels,
+		showPointOfInterestLabels,
+		showTransitLabels,
+		togglePlaceLabels,
+		toggleRoadLabels,
+		togglePointOfInterestLabels,
+		toggleTransitLabels,
+	};
 };

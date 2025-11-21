@@ -2,22 +2,45 @@ import Image from "next/image";
 
 interface LayerModalProps {
 	isOpen: boolean;
-	selectedCategories: string[];
-	onCategoryToggle: (category: string) => void;
 	selectedMapStyle: string;
 	onMapStyleChange: (style: string) => void;
+	// Mapbox label controls
+	showPlaceLabels: boolean;
+	showRoadLabels: boolean;
+	showPointOfInterestLabels: boolean;
+	showTransitLabels: boolean;
+	togglePlaceLabels: () => void;
+	toggleRoadLabels: () => void;
+	togglePointOfInterestLabels: () => void;
+	toggleTransitLabels: () => void;
 }
 
 export const LayerModal = ({
 	isOpen,
-	selectedCategories,
-	onCategoryToggle,
 	selectedMapStyle,
 	onMapStyleChange,
+	showPlaceLabels,
+	showRoadLabels,
+	showPointOfInterestLabels,
+	showTransitLabels,
+	togglePlaceLabels,
+	toggleRoadLabels,
+	togglePointOfInterestLabels,
+	toggleTransitLabels,
 }: LayerModalProps) => {
 	if (!isOpen) return null;
 
-	const categories = ["Benda", "Bangunan", "Situs", "Struktur", "Kawasan"];
+	const mapLabels = [
+		{id: "place", label: "Label Tempat", checked: showPlaceLabels, toggle: togglePlaceLabels},
+		{id: "road", label: "Label Jalan", checked: showRoadLabels, toggle: toggleRoadLabels},
+		{
+			id: "poi",
+			label: "Label Point of Interest",
+			checked: showPointOfInterestLabels,
+			toggle: togglePointOfInterestLabels,
+		},
+		{id: "transit", label: "Label Transit", checked: showTransitLabels, toggle: toggleTransitLabels},
+	];
 
 	const mapStyles = [
 		{id: "standard", name: "Standard", image: "/layer/standard.png", style: "mapbox://styles/mapbox/standard"},
@@ -33,22 +56,22 @@ export const LayerModal = ({
 				<p className="text-xs text-gray-500">Pilih item apa saja yang ingin ditampilkan</p>
 			</div>
 
-			{/* Kategori Section */}
+			{/* Label Peta Section */}
 			<div className="mb-4">
 				<div className="flex items-center mb-3">
-					<h4 className="text-sm font-medium">Kategori</h4>
+					<h4 className="text-sm font-medium">Label Peta</h4>
 					<div className="flex-1 ml-2 border-t-2 border-yellow-500" />
 				</div>
 				<div className="space-y-2">
-					{categories.map((category) => (
-						<label key={category} className="flex items-center gap-2 text-sm cursor-pointer">
+					{mapLabels.map((label) => (
+						<label key={label.id} className="flex items-center gap-2 text-sm cursor-pointer">
 							<input
 								type="checkbox"
-								checked={selectedCategories.includes(category)}
-								onChange={() => onCategoryToggle(category)}
+								checked={label.checked}
+								onChange={label.toggle}
 								className="w-4 h-4 accent-yellow-500 border-2 border-gray-300 rounded"
 							/>
-							<span>{category}</span>
+							<span>{label.label}</span>
 						</label>
 					))}
 				</div>

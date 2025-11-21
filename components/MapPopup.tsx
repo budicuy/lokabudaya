@@ -1,6 +1,5 @@
-import {ArrowRight, Landmark, Users} from "lucide-react";
+import {Landmark, Users} from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import type {Place} from "@/types";
 
 interface MapPopupProps {
@@ -32,13 +31,6 @@ export const MapPopup = ({place}: MapPopupProps) => {
 						<span className="font-medium">{place.visitors.split(" ")[0]}</span>
 					</div>
 				</div>
-
-				<Link
-					href={`/detail/${place.id}`}
-					className="w-full bg-linear-to-r from-[#5D4037] to-[#6D4C41] text-white py-3 rounded-xl text-sm font-semibold hover:from-[#4E342E] hover:to-[#5D4037] transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
-					Lihat Detail
-					<ArrowRight className="w-4 h-4" />
-				</Link>
 			</div>
 		</div>
 	);

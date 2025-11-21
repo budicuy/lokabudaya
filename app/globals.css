@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 .mapboxgl-popup-content {
 	padding: 0 !important;
 	background: transparent !important;
