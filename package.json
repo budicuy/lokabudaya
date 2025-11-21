@@ -7,12 +7,17 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check",
-		"lint:fix": "biome format --write"
+		"lint:fix": "biome format --write",
+		"db:seed": "tsx prisma/seed.ts",
+		"db:push": "prisma db push",
+		"db:generate": "prisma generate"
 	},
 	"dependencies": {
+		"@auth/prisma-adapter": "^2.11.1",
 		"@prisma/adapter-pg": "^7.0.0",
 		"@prisma/client": "^7.0.0",
 		"@types/pg": "^8.15.6",
+		"argon2": "^0.44.0",
 		"dotenv": "^17.2.3",
 		"lucide-react": "^0.553.0",
 		"next": "16.0.2",
