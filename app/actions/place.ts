@@ -1,7 +1,7 @@
 "use server";
 
 import {prisma} from "@/lib/prisma";
-import type {Category} from "@prisma/client";
+import type {Category} from "@/prisma/generated/client";
 import {revalidatePath} from "next/cache";
 import {del} from "@vercel/blob";
 

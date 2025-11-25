@@ -23,8 +23,14 @@ export const PlaceDetail = ({place, onClose, onUpdate}: PlaceDetailProps) => {
 	// Fallback for related places since we are using dynamic data now
 	// Ideally we should fetch related places by ID, but for now we filter from STATIC_PLACES if IDs match
 	// or just show empty if not found.
-	const relatedPlacesData = place.relatedPlaces
-		.map((id) => STATIC_PLACES.find((p) => p.id === id))
+	// Fallback for related places since we are using dynamic data now
+	// Ideally we should fetch related places by ID, but for now we filter from STATIC_PLACES if IDs match
+	// or just show empty if not found.
+	const relatedPlacesData = (place.relatedPlaces || [])
+		.map((item: any) => {
+			if (typeof item === "object" && item !== null) return item;
+			return STATIC_PLACES.find((p) => p.id === item);
+		})
 		.filter((p): p is Place => p !== undefined);
 
 	const [uploadedMedia, setUploadedMedia] = useState<{type: "image" | "video"; src: string; file: File}[]>([]);

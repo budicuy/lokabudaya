@@ -1,21 +1,24 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
-	"vcs": {"enabled": true, "clientKind": "git", "useIgnoreFile": true},
-	"files": {"ignoreUnknown": true, "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]},
+	"assist": {"actions": {"source": {"organizeImports": "off"}}},
+	"files": {
+		"ignoreUnknown": true,
+		"includes": ["**", "!node_modules", "!.next", "!dist", "!build", "!prisma/generated/"]
+	},
 	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
-		"indentWidth": 1,
-		"lineWidth": 120,
-		"formatWithErrors": true,
 		"bracketSameLine": true,
 		"bracketSpacing": false,
-		"expand": "never"
+		"enabled": true,
+		"expand": "never",
+		"formatWithErrors": true,
+		"indentStyle": "tab",
+		"indentWidth": 1,
+		"lineWidth": 120
 	},
 	"linter": {
+		"domains": {"next": "recommended", "react": "recommended"},
 		"enabled": true,
-		"rules": {"recommended": true, "suspicious": {"noUnknownAtRules": "off"}},
-		"domains": {"next": "recommended", "react": "recommended"}
+		"rules": {"recommended": true, "suspicious": {"noUnknownAtRules": "off"}}
 	},
-	"assist": {"actions": {"source": {"organizeImports": "off"}}}
+	"vcs": {"clientKind": "git", "enabled": true, "useIgnoreFile": true}
 }
