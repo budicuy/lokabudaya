@@ -42,7 +42,7 @@ export default function MapBox3D() {
 		places,
 	} = usePlacesFilter();
 
-	const [searchOpen, setSearchOpen] = useState(false);
+	const [searchOpen, setSearchOpen] = useState(true);
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [layerOpen, setLayerOpen] = useState(false);
 	const [jejakBudayaOpen, setJejakBudayaOpen] = useState(false);
@@ -74,13 +74,15 @@ export default function MapBox3D() {
 			}
 		}
 		// Open the selected marker popup
-		const marker = markersRef.current.get(place.id);
-		if (marker) {
-			const popup = marker.getPopup();
-			if (popup) {
-				popup.addTo(map.current);
+		setTimeout(() => {
+			const marker = markersRef.current.get(place.id);
+			if (marker) {
+				const popup = marker.getPopup();
+				if (popup) {
+					popup.addTo(map.current);
+				}
 			}
-		}
+		}, 100);
 	};
 
 	const handlePlaceClick = (place: Place) => {
@@ -117,6 +119,12 @@ export default function MapBox3D() {
 			el.style.border = "2px solid white";
 			el.style.cursor = "pointer";
 			el.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
+
+			// Add click listener to open detail panel
+			el.addEventListener("click", (e) => {
+				e.stopPropagation();
+				handlePlaceClick(place);
+			});
 
 			// Create popup container
 			const popupNode = document.createElement("div");
