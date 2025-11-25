@@ -37,7 +37,7 @@ export type UpdatePlaceInput = {
 export async function getAllPlaces() {
 	try {
 		const places = await prisma.place.findMany({
-			include: {events: true, reviews: {orderBy: {date: "desc"}}, relatedPlaces: true},
+			include: {events: true, reviews: {orderBy: {date: "desc"}}},
 			orderBy: {id: "desc"},
 		});
 
@@ -57,7 +57,7 @@ export async function getPlaceById(id: number) {
 	try {
 		const place = await prisma.place.findUnique({
 			where: {id},
-			include: {events: true, reviews: {orderBy: {date: "desc"}}, relatedPlaces: true},
+			include: {events: true, reviews: {orderBy: {date: "desc"}}},
 		});
 
 		if (!place) {
