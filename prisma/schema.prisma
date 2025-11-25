@@ -5,8 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -51,6 +50,7 @@ model Event {
 model Review {
   id         Int      @id @default(autoincrement())
   userId     String
+  userName   String   @default("Anonymous") // Add userName field
   avatar     String
   date       DateTime
   visitCount Int

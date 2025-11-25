@@ -1,5 +1,7 @@
-import {Map as MapIcon, MessageCircle, Moon, Route, Settings, Trash2} from "lucide-react";
+import {LayoutDashboard, Map as MapIcon, MessageCircle, Moon, Route, Settings, Trash2} from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
+import {SignedIn, UserButton} from "@clerk/nextjs";
 
 interface SidebarProps {
 	searchOpen: boolean;
@@ -34,6 +36,12 @@ export const Sidebar = ({searchOpen, setSearchOpen, jejakBudayaOpen, setJejakBud
 					type="button">
 					<Trash2 className="w-5 h-5" />
 				</button>
+				<Link
+					href="/dashboard"
+					className="w-10 h-10 hover:bg-gray-100 rounded-lg flex items-center justify-center text-gray-600"
+					title="Dashboard">
+					<LayoutDashboard className="w-5 h-5" />
+				</Link>
 			</div>
 			<div className="flex flex-col items-center py-4 gap-4">
 				<button
@@ -46,9 +54,9 @@ export const Sidebar = ({searchOpen, setSearchOpen, jejakBudayaOpen, setJejakBud
 					type="button">
 					<Moon className="w-5 h-5" />
 				</button>
-				<div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
-					<Image width={40} height={40} src="/avatar.png" alt="User" className="w-full h-full" />
-				</div>
+				<SignedIn>
+					<UserButton />
+				</SignedIn>
 			</div>
 		</aside>
 	);

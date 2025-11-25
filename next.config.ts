@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{hostname: "api.dicebear.com", protocol: "https"},
 			{hostname: "images.unsplash.com*", protocol: "https"},
+			{hostname: "odcsltlr8veloug2.public.blob.vercel-storage.com", protocol: "https"},
+			{hostname: "img.clerk.com", protocol: "https"},
+			{hostname: "example.com", protocol: "https"},
 		],
 	},
 };

@@ -1,12 +1,21 @@
 export interface Review {
 	id: number;
-	user: string;
+	userId: string; // Changed from user to userId to match Prisma
+	userName: string; // Add userName
+	user?: string; // Optional fallback
 	avatar: string;
-	date: string;
+	date: string | Date; // Allow Date object
 	visitCount: number;
 	content: string;
 	rating: number;
-	images: string[];
+	images: any; // Json type in Prisma, usually string[]
+}
+
+export interface Event {
+	id?: number;
+	title: string;
+	date: string | Date;
+	description: string;
 }
 
 export interface Place {
@@ -15,10 +24,12 @@ export interface Place {
 	category: string;
 	location: string;
 	description: string;
-	visitors: string;
+	visitors: number; // Changed to number
 	image: string;
-	events: {title: string; date: string; description: string}[];
-	relatedPlaces: number[];
+	events: Event[];
+	relatedPlaces: any[]; // Can be IDs or Place objects
 	reviews: Review[];
 	coordinates: [number, number];
+	longitude?: number;
+	latitude?: number;
 }

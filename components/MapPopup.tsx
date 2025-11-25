@@ -11,7 +11,7 @@ export const MapPopup = ({place}: MapPopupProps) => {
 		<div className="w-[320px] bg-white rounded-2xl shadow-xl overflow-hidden font-sans hover:shadow-2xl transition-shadow duration-300">
 			<div className="relative aspect-video w-full overflow-hidden">
 				<Image
-					src={place.image}
+					src={place.image || "https://placehold.co/600x400"}
 					alt={place.name}
 					fill
 					className="object-cover hover:scale-105 transition-transform duration-300"
@@ -28,7 +28,7 @@ export const MapPopup = ({place}: MapPopupProps) => {
 					</div>
 					<div className="flex items-center gap-2">
 						<Users className="w-4 h-4 text-amber-700" />
-						<span className="font-medium">{place.visitors.split(" ")[0]}</span>
+						<span className="font-medium">{place.visitors}</span>
 					</div>
 				</div>
 			</div>

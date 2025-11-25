@@ -31,8 +31,16 @@ export default function MapBox3D() {
 		togglePointOfInterestLabels,
 		toggleTransitLabels,
 	} = useMapbox();
-	const {searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, filteredPlaces, toggleCategory} =
-		usePlacesFilter();
+	const {
+		searchQuery,
+		setSearchQuery,
+		selectedCategory,
+		setSelectedCategory,
+		filteredPlaces,
+		toggleCategory,
+		refreshPlaces,
+		places,
+	} = usePlacesFilter();
 
 	const [searchOpen, setSearchOpen] = useState(false);
 	const [filterOpen, setFilterOpen] = useState(false);
@@ -41,6 +49,16 @@ export default function MapBox3D() {
 	const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/standard");
 	const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 	const markersRef = useRef<Map<number, any>>(new Map());
+
+	// Sync selectedPlace with updated places data
+	useEffect(() => {
+		if (selectedPlace) {
+			const updatedPlace = places.find((p) => p.id === selectedPlace.id);
+			if (updatedPlace) {
+				setSelectedPlace(updatedPlace);
+			}
+		}
+	}, [places]);
 
 	const flyToPlace = (place: Place) => {
 		// Navigate map to the place coordinates
@@ -154,7 +172,7 @@ export default function MapBox3D() {
 					/>
 				)}
 
-				{jejakBudayaOpen && <JejakBudaya places={filteredPlaces} onPlaceClick={flyToPlace} />}
+				{jejakBudayaOpen && <JejakBudaya places={places} onPlaceClick={flyToPlace} />}
 
 				<div className="flex-1 relative">
 					<div ref={mapContainer} className="w-full h-full" />
@@ -165,7 +183,9 @@ export default function MapBox3D() {
 						</div>
 					)}
 
-					{selectedPlace && <PlaceDetail place={selectedPlace} onClose={() => setSelectedPlace(null)} />}
+					{selectedPlace && (
+						<PlaceDetail place={selectedPlace} onClose={() => setSelectedPlace(null)} onUpdate={refreshPlaces} />
+					)}
 
 					<MapControls zoomIn={zoomIn} zoomOut={zoomOut} layerOpen={layerOpen} setLayerOpen={setLayerOpen} />
 

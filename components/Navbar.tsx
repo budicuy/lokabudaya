@@ -15,9 +15,6 @@ export const Navbar = () => {
 				</svg>
 			</div>
 			<div className="flex items-center gap-2">
-				<SignedIn>
-					<UserButton />
-				</SignedIn>
 				<SignedOut>
 					<SignInButton mode="modal">
 						<button

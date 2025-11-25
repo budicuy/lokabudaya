@@ -25,6 +25,7 @@ export const STATIC_PLACES: Place[] = [
 		reviews: [
 			{
 				id: 1,
+				userId: 1,
 				user: "John Doe",
 				avatar: "/avatar.png",
 				date: "12 November 2025",
@@ -41,6 +42,7 @@ export const STATIC_PLACES: Place[] = [
 			},
 			{
 				id: 2,
+				userId: 1,
 				user: "Jane Smith",
 				avatar: "/avatar.png",
 				date: "10 November 2025",
