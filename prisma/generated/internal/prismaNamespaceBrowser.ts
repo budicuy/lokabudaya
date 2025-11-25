@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Place: 'Place',
   Event: 'Event',
-  Review: 'Review'
+  Review: 'Review',
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -80,8 +81,8 @@ export const PlaceScalarFieldEnum = {
   description: 'description',
   visitors: 'visitors',
   image: 'image',
-  longitude: 'longitude',
-  latitude: 'latitude'
+  coordinates: 'coordinates',
+  relatedPlaces: 'relatedPlaces'
 } as const
 
 export type PlaceScalarFieldEnum = (typeof PlaceScalarFieldEnum)[keyof typeof PlaceScalarFieldEnum]
@@ -101,6 +102,7 @@ export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof Ev
 export const ReviewScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  user: 'user',
   avatar: 'avatar',
   date: 'date',
   visitCount: 'visitCount',
@@ -113,46 +115,23 @@ export const ReviewScalarFieldEnum = {
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
 
 
+export const UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: 'JsonNull'
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-export const PlaceOrderByRelevanceFieldEnum = {
-  name: 'name',
-  location: 'location',
-  description: 'description',
-  image: 'image'
-} as const
-
-export type PlaceOrderByRelevanceFieldEnum = (typeof PlaceOrderByRelevanceFieldEnum)[keyof typeof PlaceOrderByRelevanceFieldEnum]
-
-
-export const EventOrderByRelevanceFieldEnum = {
-  title: 'title',
-  description: 'description'
-} as const
-
-export type EventOrderByRelevanceFieldEnum = (typeof EventOrderByRelevanceFieldEnum)[keyof typeof EventOrderByRelevanceFieldEnum]
-
-
-export const JsonNullValueFilter = {
-  DbNull: 'DbNull',
-  JsonNull: 'JsonNull',
-  AnyNull: 'AnyNull'
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const QueryMode = {
@@ -169,13 +148,4 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const ReviewOrderByRelevanceFieldEnum = {
-  userId: 'userId',
-  avatar: 'avatar',
-  content: 'content'
-} as const
-
-export type ReviewOrderByRelevanceFieldEnum = (typeof ReviewOrderByRelevanceFieldEnum)[keyof typeof ReviewOrderByRelevanceFieldEnum]
 

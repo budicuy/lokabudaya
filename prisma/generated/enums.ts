@@ -9,11 +9,7 @@
 * 🟢 You can import this file directly.
 */
 
-export const Category = {
-  Bangunan: 'Bangunan',
-  Situs: 'Situs',
-  Struktur: 'Struktur',
-  Kawasan: 'Kawasan'
-} as const
 
-export type Category = (typeof Category)[keyof typeof Category]
+
+// This file is empty because there are no enums in the schema.
+export {}

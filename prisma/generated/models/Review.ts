@@ -28,6 +28,7 @@ export type AggregateReview = {
 
 export type ReviewAvgAggregateOutputType = {
   id: number | null
+  userId: number | null
   visitCount: number | null
   rating: number | null
   placeId: number | null
@@ -35,6 +36,7 @@ export type ReviewAvgAggregateOutputType = {
 
 export type ReviewSumAggregateOutputType = {
   id: number | null
+  userId: number | null
   visitCount: number | null
   rating: number | null
   placeId: number | null
@@ -42,9 +44,10 @@ export type ReviewSumAggregateOutputType = {
 
 export type ReviewMinAggregateOutputType = {
   id: number | null
-  userId: string | null
+  userId: number | null
+  user: string | null
   avatar: string | null
-  date: Date | null
+  date: string | null
   visitCount: number | null
   content: string | null
   rating: number | null
@@ -53,9 +56,10 @@ export type ReviewMinAggregateOutputType = {
 
 export type ReviewMaxAggregateOutputType = {
   id: number | null
-  userId: string | null
+  userId: number | null
+  user: string | null
   avatar: string | null
-  date: Date | null
+  date: string | null
   visitCount: number | null
   content: string | null
   rating: number | null
@@ -65,6 +69,7 @@ export type ReviewMaxAggregateOutputType = {
 export type ReviewCountAggregateOutputType = {
   id: number
   userId: number
+  user: number
   avatar: number
   date: number
   visitCount: number
@@ -78,6 +83,7 @@ export type ReviewCountAggregateOutputType = {
 
 export type ReviewAvgAggregateInputType = {
   id?: true
+  userId?: true
   visitCount?: true
   rating?: true
   placeId?: true
@@ -85,6 +91,7 @@ export type ReviewAvgAggregateInputType = {
 
 export type ReviewSumAggregateInputType = {
   id?: true
+  userId?: true
   visitCount?: true
   rating?: true
   placeId?: true
@@ -93,6 +100,7 @@ export type ReviewSumAggregateInputType = {
 export type ReviewMinAggregateInputType = {
   id?: true
   userId?: true
+  user?: true
   avatar?: true
   date?: true
   visitCount?: true
@@ -104,6 +112,7 @@ export type ReviewMinAggregateInputType = {
 export type ReviewMaxAggregateInputType = {
   id?: true
   userId?: true
+  user?: true
   avatar?: true
   date?: true
   visitCount?: true
@@ -115,6 +124,7 @@ export type ReviewMaxAggregateInputType = {
 export type ReviewCountAggregateInputType = {
   id?: true
   userId?: true
+  user?: true
   avatar?: true
   date?: true
   visitCount?: true
@@ -213,14 +223,15 @@ export type ReviewGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type ReviewGroupByOutputType = {
   id: number
-  userId: string
+  userId: number
+  user: string
   avatar: string
-  date: Date
+  date: string
   visitCount: number
   content: string
   rating: number
-  images: runtime.JsonValue
-  placeId: number | null
+  images: string[]
+  placeId: number
   _count: ReviewCountAggregateOutputType | null
   _avg: ReviewAvgAggregateOutputType | null
   _sum: ReviewSumAggregateOutputType | null
@@ -248,29 +259,30 @@ export type ReviewWhereInput = {
   OR?: Prisma.ReviewWhereInput[]
   NOT?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
   id?: Prisma.IntFilter<"Review"> | number
-  userId?: Prisma.StringFilter<"Review"> | string
+  userId?: Prisma.IntFilter<"Review"> | number
+  user?: Prisma.StringFilter<"Review"> | string
   avatar?: Prisma.StringFilter<"Review"> | string
-  date?: Prisma.DateTimeFilter<"Review"> | Date | string
+  date?: Prisma.StringFilter<"Review"> | string
   visitCount?: Prisma.IntFilter<"Review"> | number
   content?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
-  images?: Prisma.JsonFilter<"Review">
-  placeId?: Prisma.IntNullableFilter<"Review"> | number | null
-  place?: Prisma.XOR<Prisma.PlaceNullableScalarRelationFilter, Prisma.PlaceWhereInput> | null
+  images?: Prisma.StringNullableListFilter<"Review">
+  placeId?: Prisma.IntFilter<"Review"> | number
+  place?: Prisma.XOR<Prisma.PlaceScalarRelationFilter, Prisma.PlaceWhereInput>
 }
 
 export type ReviewOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  user?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
   date?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
   content?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   images?: Prisma.SortOrder
-  placeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  placeId?: Prisma.SortOrder
   place?: Prisma.PlaceOrderByWithRelationInput
-  _relevance?: Prisma.ReviewOrderByRelevanceInput
 }
 
 export type ReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -278,27 +290,29 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
   OR?: Prisma.ReviewWhereInput[]
   NOT?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
-  userId?: Prisma.StringFilter<"Review"> | string
+  userId?: Prisma.IntFilter<"Review"> | number
+  user?: Prisma.StringFilter<"Review"> | string
   avatar?: Prisma.StringFilter<"Review"> | string
-  date?: Prisma.DateTimeFilter<"Review"> | Date | string
+  date?: Prisma.StringFilter<"Review"> | string
   visitCount?: Prisma.IntFilter<"Review"> | number
   content?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
-  images?: Prisma.JsonFilter<"Review">
-  placeId?: Prisma.IntNullableFilter<"Review"> | number | null
-  place?: Prisma.XOR<Prisma.PlaceNullableScalarRelationFilter, Prisma.PlaceWhereInput> | null
+  images?: Prisma.StringNullableListFilter<"Review">
+  placeId?: Prisma.IntFilter<"Review"> | number
+  place?: Prisma.XOR<Prisma.PlaceScalarRelationFilter, Prisma.PlaceWhereInput>
 }, "id">
 
 export type ReviewOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  user?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
   date?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
   content?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   images?: Prisma.SortOrder
-  placeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  placeId?: Prisma.SortOrder
   _count?: Prisma.ReviewCountOrderByAggregateInput
   _avg?: Prisma.ReviewAvgOrderByAggregateInput
   _max?: Prisma.ReviewMaxOrderByAggregateInput
@@ -311,94 +325,102 @@ export type ReviewScalarWhereWithAggregatesInput = {
   OR?: Prisma.ReviewScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ReviewScalarWhereWithAggregatesInput | Prisma.ReviewScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Review"> | number
-  userId?: Prisma.StringWithAggregatesFilter<"Review"> | string
+  userId?: Prisma.IntWithAggregatesFilter<"Review"> | number
+  user?: Prisma.StringWithAggregatesFilter<"Review"> | string
   avatar?: Prisma.StringWithAggregatesFilter<"Review"> | string
-  date?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
+  date?: Prisma.StringWithAggregatesFilter<"Review"> | string
   visitCount?: Prisma.IntWithAggregatesFilter<"Review"> | number
   content?: Prisma.StringWithAggregatesFilter<"Review"> | string
   rating?: Prisma.IntWithAggregatesFilter<"Review"> | number
-  images?: Prisma.JsonWithAggregatesFilter<"Review">
-  placeId?: Prisma.IntNullableWithAggregatesFilter<"Review"> | number | null
+  images?: Prisma.StringNullableListFilter<"Review">
+  placeId?: Prisma.IntWithAggregatesFilter<"Review"> | number
 }
 
 export type ReviewCreateInput = {
-  userId: string
+  userId: number
+  user: string
   avatar: string
-  date: Date | string
+  date: string
   visitCount: number
   content: string
   rating: number
-  images: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  place?: Prisma.PlaceCreateNestedOneWithoutReviewsInput
+  images?: Prisma.ReviewCreateimagesInput | string[]
+  place: Prisma.PlaceCreateNestedOneWithoutReviewsInput
 }
 
 export type ReviewUncheckedCreateInput = {
   id?: number
-  userId: string
+  userId: number
+  user: string
   avatar: string
-  date: Date | string
+  date: string
   visitCount: number
   content: string
   rating: number
-  images: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  placeId?: number | null
+  images?: Prisma.ReviewCreateimagesInput | string[]
+  placeId: number
 }
 
 export type ReviewUpdateInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  place?: Prisma.PlaceUpdateOneWithoutReviewsNestedInput
+  images?: Prisma.ReviewUpdateimagesInput | string[]
+  place?: Prisma.PlaceUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 export type ReviewUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  placeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  images?: Prisma.ReviewUpdateimagesInput | string[]
+  placeId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ReviewCreateManyInput = {
   id?: number
-  userId: string
+  userId: number
+  user: string
   avatar: string
-  date: Date | string
+  date: string
   visitCount: number
   content: string
   rating: number
-  images: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  placeId?: number | null
+  images?: Prisma.ReviewCreateimagesInput | string[]
+  placeId: number
 }
 
 export type ReviewUpdateManyMutationInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  images?: Prisma.ReviewUpdateimagesInput | string[]
 }
 
 export type ReviewUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  placeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  images?: Prisma.ReviewUpdateimagesInput | string[]
+  placeId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ReviewListRelationFilter = {
@@ -411,15 +433,18 @@ export type ReviewOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ReviewOrderByRelevanceInput = {
-  fields: Prisma.ReviewOrderByRelevanceFieldEnum | Prisma.ReviewOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type ReviewCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  user?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
   date?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
@@ -431,6 +456,7 @@ export type ReviewCountOrderByAggregateInput = {
 
 export type ReviewAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   placeId?: Prisma.SortOrder
@@ -439,6 +465,7 @@ export type ReviewAvgOrderByAggregateInput = {
 export type ReviewMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  user?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
   date?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
@@ -450,6 +477,7 @@ export type ReviewMaxOrderByAggregateInput = {
 export type ReviewMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  user?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
   date?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
@@ -460,6 +488,7 @@ export type ReviewMinOrderByAggregateInput = {
 
 export type ReviewSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   placeId?: Prisma.SortOrder
@@ -507,33 +536,36 @@ export type ReviewUncheckedUpdateManyWithoutPlaceNestedInput = {
   deleteMany?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type ReviewCreateimagesInput = {
+  set: string[]
+}
+
+export type ReviewUpdateimagesInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type ReviewCreateWithoutPlaceInput = {
-  userId: string
+  userId: number
+  user: string
   avatar: string
-  date: Date | string
+  date: string
   visitCount: number
   content: string
   rating: number
-  images: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  images?: Prisma.ReviewCreateimagesInput | string[]
 }
 
 export type ReviewUncheckedCreateWithoutPlaceInput = {
   id?: number
-  userId: string
+  userId: number
+  user: string
   avatar: string
-  date: Date | string
+  date: string
   visitCount: number
   content: string
   rating: number
-  images: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  images?: Prisma.ReviewCreateimagesInput | string[]
 }
 
 export type ReviewCreateOrConnectWithoutPlaceInput = {
@@ -567,57 +599,62 @@ export type ReviewScalarWhereInput = {
   OR?: Prisma.ReviewScalarWhereInput[]
   NOT?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
   id?: Prisma.IntFilter<"Review"> | number
-  userId?: Prisma.StringFilter<"Review"> | string
+  userId?: Prisma.IntFilter<"Review"> | number
+  user?: Prisma.StringFilter<"Review"> | string
   avatar?: Prisma.StringFilter<"Review"> | string
-  date?: Prisma.DateTimeFilter<"Review"> | Date | string
+  date?: Prisma.StringFilter<"Review"> | string
   visitCount?: Prisma.IntFilter<"Review"> | number
   content?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
-  images?: Prisma.JsonFilter<"Review">
-  placeId?: Prisma.IntNullableFilter<"Review"> | number | null
+  images?: Prisma.StringNullableListFilter<"Review">
+  placeId?: Prisma.IntFilter<"Review"> | number
 }
 
 export type ReviewCreateManyPlaceInput = {
   id?: number
-  userId: string
+  userId: number
+  user: string
   avatar: string
-  date: Date | string
+  date: string
   visitCount: number
   content: string
   rating: number
-  images: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  images?: Prisma.ReviewCreateimagesInput | string[]
 }
 
 export type ReviewUpdateWithoutPlaceInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  images?: Prisma.ReviewUpdateimagesInput | string[]
 }
 
 export type ReviewUncheckedUpdateWithoutPlaceInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  images?: Prisma.ReviewUpdateimagesInput | string[]
 }
 
 export type ReviewUncheckedUpdateManyWithoutPlaceInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  images?: Prisma.ReviewUpdateimagesInput | string[]
 }
 
 
@@ -625,6 +662,7 @@ export type ReviewUncheckedUpdateManyWithoutPlaceInput = {
 export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  user?: boolean
   avatar?: boolean
   date?: boolean
   visitCount?: boolean
@@ -632,14 +670,41 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   rating?: boolean
   images?: boolean
   placeId?: boolean
-  place?: boolean | Prisma.Review$placeArgs<ExtArgs>
+  place?: boolean | Prisma.PlaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
+export type ReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  user?: boolean
+  avatar?: boolean
+  date?: boolean
+  visitCount?: boolean
+  content?: boolean
+  rating?: boolean
+  images?: boolean
+  placeId?: boolean
+  place?: boolean | Prisma.PlaceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["review"]>
 
+export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  user?: boolean
+  avatar?: boolean
+  date?: boolean
+  visitCount?: boolean
+  content?: boolean
+  rating?: boolean
+  images?: boolean
+  placeId?: boolean
+  place?: boolean | Prisma.PlaceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["review"]>
 
 export type ReviewSelectScalar = {
   id?: boolean
   userId?: boolean
+  user?: boolean
   avatar?: boolean
   date?: boolean
   visitCount?: boolean
@@ -649,26 +714,33 @@ export type ReviewSelectScalar = {
   placeId?: boolean
 }
 
-export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "avatar" | "date" | "visitCount" | "content" | "rating" | "images" | "placeId", ExtArgs["result"]["review"]>
+export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "user" | "avatar" | "date" | "visitCount" | "content" | "rating" | "images" | "placeId", ExtArgs["result"]["review"]>
 export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  place?: boolean | Prisma.Review$placeArgs<ExtArgs>
+  place?: boolean | Prisma.PlaceDefaultArgs<ExtArgs>
+}
+export type ReviewIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  place?: boolean | Prisma.PlaceDefaultArgs<ExtArgs>
+}
+export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  place?: boolean | Prisma.PlaceDefaultArgs<ExtArgs>
 }
 
 export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Review"
   objects: {
-    place: Prisma.$PlacePayload<ExtArgs> | null
+    place: Prisma.$PlacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    userId: string
+    userId: number
+    user: string
     avatar: string
-    date: Date
+    date: string
     visitCount: number
     content: string
     rating: number
-    images: runtime.JsonValue
-    placeId: number | null
+    images: string[]
+    placeId: number
   }, ExtArgs["result"]["review"]>
   composites: {}
 }
@@ -787,6 +859,30 @@ export interface ReviewDelegate<ExtArgs extends runtime.Types.Extensions.Interna
   createMany<T extends ReviewCreateManyArgs>(args?: Prisma.SelectSubset<T, ReviewCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Reviews and returns the data saved in the database.
+   * @param {ReviewCreateManyAndReturnArgs} args - Arguments to create many Reviews.
+   * @example
+   * // Create many Reviews
+   * const review = await prisma.review.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Reviews and only return the `id`
+   * const reviewWithIdOnly = await prisma.review.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ReviewCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ReviewCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Review.
    * @param {ReviewDeleteArgs} args - Arguments to delete one Review.
    * @example
@@ -849,6 +945,36 @@ export interface ReviewDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    * 
    */
   updateMany<T extends ReviewUpdateManyArgs>(args: Prisma.SelectSubset<T, ReviewUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Reviews and returns the data updated in the database.
+   * @param {ReviewUpdateManyAndReturnArgs} args - Arguments to update many Reviews.
+   * @example
+   * // Update many Reviews
+   * const review = await prisma.review.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Reviews and only return the `id`
+   * const reviewWithIdOnly = await prisma.review.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ReviewUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ReviewUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Review.
@@ -1009,7 +1135,7 @@ readonly fields: ReviewFieldRefs;
  */
 export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  place<T extends Prisma.Review$placeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Review$placeArgs<ExtArgs>>): Prisma.Prisma__PlaceClient<runtime.Types.Result.GetResult<Prisma.$PlacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  place<T extends Prisma.PlaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlaceDefaultArgs<ExtArgs>>): Prisma.Prisma__PlaceClient<runtime.Types.Result.GetResult<Prisma.$PlacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1040,13 +1166,14 @@ export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface ReviewFieldRefs {
   readonly id: Prisma.FieldRef<"Review", 'Int'>
-  readonly userId: Prisma.FieldRef<"Review", 'String'>
+  readonly userId: Prisma.FieldRef<"Review", 'Int'>
+  readonly user: Prisma.FieldRef<"Review", 'String'>
   readonly avatar: Prisma.FieldRef<"Review", 'String'>
-  readonly date: Prisma.FieldRef<"Review", 'DateTime'>
+  readonly date: Prisma.FieldRef<"Review", 'String'>
   readonly visitCount: Prisma.FieldRef<"Review", 'Int'>
   readonly content: Prisma.FieldRef<"Review", 'String'>
   readonly rating: Prisma.FieldRef<"Review", 'Int'>
-  readonly images: Prisma.FieldRef<"Review", 'Json'>
+  readonly images: Prisma.FieldRef<"Review", 'String[]'>
   readonly placeId: Prisma.FieldRef<"Review", 'Int'>
 }
     
@@ -1281,6 +1408,29 @@ export type ReviewCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Review createManyAndReturn
+ */
+export type ReviewCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Review
+   */
+  select?: Prisma.ReviewSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Review
+   */
+  omit?: Prisma.ReviewOmit<ExtArgs> | null
+  /**
+   * The data used to create many Reviews.
+   */
+  data: Prisma.ReviewCreateManyInput | Prisma.ReviewCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Review update
  */
 export type ReviewUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1322,6 +1472,36 @@ export type ReviewUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Reviews to update.
    */
   limit?: number
+}
+
+/**
+ * Review updateManyAndReturn
+ */
+export type ReviewUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Review
+   */
+  select?: Prisma.ReviewSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Review
+   */
+  omit?: Prisma.ReviewOmit<ExtArgs> | null
+  /**
+   * The data used to update Reviews.
+   */
+  data: Prisma.XOR<Prisma.ReviewUpdateManyMutationInput, Prisma.ReviewUncheckedUpdateManyInput>
+  /**
+   * Filter which Reviews to update
+   */
+  where?: Prisma.ReviewWhereInput
+  /**
+   * Limit how many Reviews to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1388,25 +1568,6 @@ export type ReviewDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Reviews to delete.
    */
   limit?: number
-}
-
-/**
- * Review.place
- */
-export type Review$placeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Place
-   */
-  select?: Prisma.PlaceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Place
-   */
-  omit?: Prisma.PlaceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PlaceInclude<ExtArgs> | null
-  where?: Prisma.PlaceWhereInput
 }
 
 /**

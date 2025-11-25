@@ -11,7 +11,7 @@ export const MapPopup = ({place}: MapPopupProps) => {
 		<div className="w-[320px] bg-white rounded-2xl shadow-xl overflow-hidden font-sans hover:shadow-2xl transition-shadow duration-300">
 			<div className="relative aspect-video w-full overflow-hidden">
 				<Image
-					src={place.image || "https://placehold.co/600x400"}
+					src={place.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyQlKuZA1OmkacVjfRKyW_q95fFs1wP1Nevg&s"}
 					alt={place.name}
 					fill
 					className="object-cover hover:scale-105 transition-transform duration-300"

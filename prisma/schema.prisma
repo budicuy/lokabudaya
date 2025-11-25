@@ -1,62 +1,55 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client"
+    output   = "./generated"
 }
 
 datasource db {
-  provider = "mysql"
-}
-
-enum Category {
-  Bangunan
-  Situs
-  Struktur
-  Kawasan
+    provider = "postgresql"
 }
 
 model Place {
-  id          Int      @id @default(autoincrement())
-  name        String
-  category    Category
-  location    String
-  description String   @db.Text
-  visitors    Int
-  image       String
+    id            Int     @id @default(autoincrement())
+    name          String
+    category      String
+    location      String
+    description   String
+    visitors      String
+    image         String
+    coordinates   Float[]
+    relatedPlaces Int[]
 
-  longitude Float
-  latitude  Float
-
-  events  Event[]
-  reviews Review[]
-
-  relatedPlaces Place[] @relation("RelatedPlaces")
-  relatedTo     Place[] @relation("RelatedPlaces")
+    events  Event[]
+    reviews Review[]
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  title       String
-  date        DateTime
-  description String   @db.Text
-  place       Place    @relation(fields: [placeId], references: [id])
-  placeId     Int
+    id          Int    @id @default(autoincrement())
+    title       String
+    date        String
+    description String
+    placeId     Int
+    place       Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
 }
 
 model Review {
-  id         Int      @id @default(autoincrement())
-  userId     String
-  userName   String   @default("Anonymous") // Add userName field
-  avatar     String
-  date       DateTime
-  visitCount Int
-  content    String   @db.Text
-  rating     Int
-  images     Json
-  place      Place?   @relation(fields: [placeId], references: [id])
-  placeId    Int?
+    id         Int      @id @default(autoincrement())
+    userId     Int
+    user       String
+    avatar     String
+    date       String
+    visitCount Int
+    content    String
+    rating     Int
+    images     String[]
+
+    placeId Int
+    place   Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    name      String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

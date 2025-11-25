@@ -19,8 +19,8 @@ const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
   "clientVersion": "7.0.0",
   "engineVersion": "0c19ccc313cf9911a90d99d2ac2eb0280c76c513",
-  "activeProvider": "mysql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider   = \"prisma-client\"\n  output     = \"./generated\"\n  engineType = \"client\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nenum Category {\n  Bangunan\n  Situs\n  Struktur\n  Kawasan\n}\n\nmodel Place {\n  id          Int      @id @default(autoincrement())\n  name        String\n  category    Category\n  location    String\n  description String   @db.Text\n  visitors    Int\n  image       String\n\n  longitude Float\n  latitude  Float\n\n  events  Event[]\n  reviews Review[]\n\n  relatedPlaces Place[] @relation(\"RelatedPlaces\")\n  relatedTo     Place[] @relation(\"RelatedPlaces\")\n}\n\nmodel Event {\n  id          Int      @id @default(autoincrement())\n  title       String\n  date        DateTime\n  description String   @db.Text\n  place       Place    @relation(fields: [placeId], references: [id])\n  placeId     Int\n}\n\nmodel Review {\n  id         Int      @id @default(autoincrement())\n  userId     String\n  avatar     String\n  date       DateTime\n  visitCount Int\n  content    String   @db.Text\n  rating     Int\n  images     Json\n  place      Place?   @relation(fields: [placeId], references: [id])\n  placeId    Int?\n}\n",
+  "activeProvider": "postgresql",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Place {\n  id            Int     @id @default(autoincrement())\n  name          String\n  category      String\n  location      String\n  description   String\n  visitors      String\n  image         String\n  coordinates   Float[]\n  relatedPlaces Int[]\n\n  events  Event[]\n  reviews Review[]\n}\n\nmodel Event {\n  id          Int    @id @default(autoincrement())\n  title       String\n  date        String\n  description String\n  placeId     Int\n  place       Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)\n}\n\nmodel Review {\n  id         Int      @id @default(autoincrement())\n  userId     Int\n  user       String\n  avatar     String\n  date       String\n  visitCount Int\n  content    String\n  rating     Int\n  images     String[]\n\n  placeId Int\n  place   Place @relation(fields: [placeId], references: [id], onDelete: Cascade)\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  name      String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Place\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"enum\",\"type\":\"Category\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"visitors\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"longitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"latitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"Event\",\"relationName\":\"EventToPlace\"},{\"name\":\"reviews\",\"kind\":\"object\",\"type\":\"Review\",\"relationName\":\"PlaceToReview\"},{\"name\":\"relatedPlaces\",\"kind\":\"object\",\"type\":\"Place\",\"relationName\":\"RelatedPlaces\"},{\"name\":\"relatedTo\",\"kind\":\"object\",\"type\":\"Place\",\"relationName\":\"RelatedPlaces\"}],\"dbName\":null},\"Event\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"place\",\"kind\":\"object\",\"type\":\"Place\",\"relationName\":\"EventToPlace\"},{\"name\":\"placeId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"Review\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"avatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"visitCount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"images\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"place\",\"kind\":\"object\",\"type\":\"Place\",\"relationName\":\"PlaceToReview\"},{\"name\":\"placeId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Place\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"visitors\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"coordinates\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"relatedPlaces\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"Event\",\"relationName\":\"EventToPlace\"},{\"name\":\"reviews\",\"kind\":\"object\",\"type\":\"Review\",\"relationName\":\"PlaceToReview\"}],\"dbName\":null},\"Event\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"placeId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"place\",\"kind\":\"object\",\"type\":\"Place\",\"relationName\":\"EventToPlace\"}],\"dbName\":null},\"Review\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"avatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"visitCount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"images\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"placeId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"place\",\"kind\":\"object\",\"type\":\"Place\",\"relationName\":\"PlaceToReview\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -37,10 +37,10 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_bg.mysql.mjs"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_bg.postgresql.mjs"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_bg.mysql.wasm-base64.mjs")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_bg.postgresql.wasm-base64.mjs")
     return await decodeBase64AsWasm(wasm)
   }
 }
@@ -203,6 +203,16 @@ export interface PrismaClient<
     * ```
     */
   get review(): Prisma.ReviewDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
+    * ```
+    */
+  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

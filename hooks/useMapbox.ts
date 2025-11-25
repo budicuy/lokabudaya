@@ -40,10 +40,10 @@ export const useMapbox = () => {
 			map.current = new mapboxgl.Map({
 				container: mapContainer.current,
 				style: "mapbox://styles/mapbox/standard",
-				center: [106.8272, -6.1751],
-				zoom: 16,
-				pitch: 60,
-				bearing: -17.6,
+				center: [118.0149, -2.5489], // Center of Indonesia
+				zoom: 4, // Zoom level to see the whole country
+				pitch: 0, // Top-down view
+				bearing: 0, // North up
 				antialias: true,
 			});
 
