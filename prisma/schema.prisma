@@ -34,7 +34,7 @@ model Event {
 
 model Review {
     id         Int      @id @default(autoincrement())
-    userId     Int
+    userId     String
     user       String
     avatar     String
     date       DateTime
