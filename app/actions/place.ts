@@ -203,7 +203,13 @@ export async function deletePlace(id: number) {
 export async function searchPlaces(query: string) {
 	try {
 		const places = await prisma.place.findMany({
-			where: {OR: [{name: {contains: query}}, {location: {contains: query}}, {description: {contains: query}}]},
+			where: {
+				OR: [
+					{name: {contains: query, mode: "insensitive"}},
+					{location: {contains: query, mode: "insensitive"}},
+					{description: {contains: query, mode: "insensitive"}},
+				],
+			},
 			include: {events: true, reviews: {orderBy: {date: "desc"}}},
 			orderBy: {id: "desc"},
 		});

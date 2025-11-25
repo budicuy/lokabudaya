@@ -3,7 +3,7 @@
 import {useState, useEffect, useCallback} from "react";
 import {getAllPlaces, searchPlaces, getPlacesByCategory, deletePlace} from "@/app/actions/place";
 import {CategoryValues, type Category, type Place} from "@/types/place";
-import {Search, Pencil, Trash2, Eye, MapPin} from "lucide-react";
+import {Search, Pencil, Trash2, Eye, MapPin, X} from "lucide-react";
 import Image from "next/image";
 
 type PlacesContentProps = {initialPlaces: Place[]; onOpenForm: (place?: Place) => void};
@@ -117,8 +117,16 @@ export function PlacesContent({initialPlaces, onOpenForm}: PlacesContentProps) {
 							placeholder="Cari tempat berdasarkan nama, lokasi, atau deskripsi..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
-							className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+							className="w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
 						/>
+						{searchQuery && (
+							<button
+								type="button"
+								onClick={() => setSearchQuery("")}
+								className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+								<X className="w-5 h-5" />
+							</button>
+						)}
 					</div>
 
 					{/* Category Filter */}
