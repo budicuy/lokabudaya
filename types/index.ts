@@ -1,7 +1,7 @@
 export interface Review {
 	id: number;
-	userId: number; // Changed to number to match Prisma
-	userName?: string; // Add userName
+	userId: string; // Changed from user to userId to match Prisma
+	userName: string; // Add userName
 	user?: string; // Optional fallback
 	avatar: string;
 	date: string | Date; // Allow Date object
@@ -24,11 +24,12 @@ export interface Place {
 	category: string;
 	location: string;
 	description: string;
-	visitors: number;
+	visitors: number; // Changed to number
 	image: string;
 	events: Event[];
 	relatedPlaces: any[]; // Can be IDs or Place objects
 	reviews: Review[];
-	longitude: number;
-	latitude: number;
+	coordinates: [number, number];
+	longitude?: number;
+	latitude?: number;
 }

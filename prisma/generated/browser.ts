@@ -32,8 +32,3 @@ export type Event = Prisma.EventModel
  * 
  */
 export type Review = Prisma.ReviewModel
-/**
- * Model User
- * 
- */
-export type User = Prisma.UserModel

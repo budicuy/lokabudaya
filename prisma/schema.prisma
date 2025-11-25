@@ -7,50 +7,48 @@ datasource db {
     provider = "postgresql"
 }
 
-model Place {
-    id            Int    @id @default(autoincrement())
-    name          String
-    category      String
-    location      String
-    description   String
-    visitors      Int    @default(0)
-    image         String
-    latitude      Float
-    longitude     Float
-    relatedPlaces Int[]
+enum Category {
+    Bangunan
+    Situs
+    Struktur
+    Kawasan
+}
 
-    events  Event[]
-    reviews Review[]
+model Place {
+    id            Int      @id @default(autoincrement())
+    name          String
+    category      Category
+    location      String
+    description   String   @db.Text
+    visitors      Int
+    image         String
+    longitude     Float
+    latitude      Float
+    events        Event[]
+    reviews       Review[]
+    relatedPlaces Place[]  @relation("RelatedPlaces")
+    relatedTo     Place[]  @relation("RelatedPlaces")
 }
 
 model Event {
     id          Int      @id @default(autoincrement())
     title       String
     date        DateTime
-    description String
+    description String   @db.Text
+    place       Place    @relation(fields: [placeId], references: [id])
     placeId     Int
-    place       Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
 }
 
 model Review {
     id         Int      @id @default(autoincrement())
     userId     String
-    user       String
+    userName   String   @default("Anonymous") // Add userName field
     avatar     String
     date       DateTime
     visitCount Int
-    content    String
+    content    String   @db.Text
     rating     Int
-    images     String[]
-
-    placeId Int
-    place   Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
-}
-
-model User {
-    id        Int      @id @default(autoincrement())
-    email     String   @unique
-    name      String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    images     Json
+    place      Place?   @relation(fields: [placeId], references: [id])
+    placeId    Int?
 }

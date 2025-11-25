@@ -29,41 +29,39 @@ export type AggregatePlace = {
 export type PlaceAvgAggregateOutputType = {
   id: number | null
   visitors: number | null
-  latitude: number | null
   longitude: number | null
-  relatedPlaces: number | null
+  latitude: number | null
 }
 
 export type PlaceSumAggregateOutputType = {
   id: number | null
   visitors: number | null
-  latitude: number | null
   longitude: number | null
-  relatedPlaces: number[]
+  latitude: number | null
 }
 
 export type PlaceMinAggregateOutputType = {
   id: number | null
   name: string | null
-  category: string | null
+  category: $Enums.Category | null
   location: string | null
   description: string | null
   visitors: number | null
   image: string | null
-  latitude: number | null
   longitude: number | null
+  latitude: number | null
 }
 
 export type PlaceMaxAggregateOutputType = {
   id: number | null
   name: string | null
-  category: string | null
+  category: $Enums.Category | null
   location: string | null
   description: string | null
   visitors: number | null
   image: string | null
-  latitude: number | null
   longitude: number | null
+  latitude: number | null
 }
 
 export type PlaceCountAggregateOutputType = {
@@ -74,9 +72,8 @@ export type PlaceCountAggregateOutputType = {
   description: number
   visitors: number
   image: number
-  latitude: number
   longitude: number
-  relatedPlaces: number
+  latitude: number
   _all: number
 }
 
@@ -84,17 +81,15 @@ export type PlaceCountAggregateOutputType = {
 export type PlaceAvgAggregateInputType = {
   id?: true
   visitors?: true
-  latitude?: true
   longitude?: true
-  relatedPlaces?: true
+  latitude?: true
 }
 
 export type PlaceSumAggregateInputType = {
   id?: true
   visitors?: true
-  latitude?: true
   longitude?: true
-  relatedPlaces?: true
+  latitude?: true
 }
 
 export type PlaceMinAggregateInputType = {
@@ -105,8 +100,8 @@ export type PlaceMinAggregateInputType = {
   description?: true
   visitors?: true
   image?: true
-  latitude?: true
   longitude?: true
+  latitude?: true
 }
 
 export type PlaceMaxAggregateInputType = {
@@ -117,8 +112,8 @@ export type PlaceMaxAggregateInputType = {
   description?: true
   visitors?: true
   image?: true
-  latitude?: true
   longitude?: true
+  latitude?: true
 }
 
 export type PlaceCountAggregateInputType = {
@@ -129,9 +124,8 @@ export type PlaceCountAggregateInputType = {
   description?: true
   visitors?: true
   image?: true
-  latitude?: true
   longitude?: true
-  relatedPlaces?: true
+  latitude?: true
   _all?: true
 }
 
@@ -224,14 +218,13 @@ export type PlaceGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type PlaceGroupByOutputType = {
   id: number
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
   visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces: number[]
+  latitude: number
   _count: PlaceCountAggregateOutputType | null
   _avg: PlaceAvgAggregateOutputType | null
   _sum: PlaceSumAggregateOutputType | null
@@ -260,16 +253,17 @@ export type PlaceWhereInput = {
   NOT?: Prisma.PlaceWhereInput | Prisma.PlaceWhereInput[]
   id?: Prisma.IntFilter<"Place"> | number
   name?: Prisma.StringFilter<"Place"> | string
-  category?: Prisma.StringFilter<"Place"> | string
+  category?: Prisma.EnumCategoryFilter<"Place"> | $Enums.Category
   location?: Prisma.StringFilter<"Place"> | string
   description?: Prisma.StringFilter<"Place"> | string
   visitors?: Prisma.IntFilter<"Place"> | number
   image?: Prisma.StringFilter<"Place"> | string
-  latitude?: Prisma.FloatFilter<"Place"> | number
   longitude?: Prisma.FloatFilter<"Place"> | number
-  relatedPlaces?: Prisma.IntNullableListFilter<"Place">
+  latitude?: Prisma.FloatFilter<"Place"> | number
   events?: Prisma.EventListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
+  relatedPlaces?: Prisma.PlaceListRelationFilter
+  relatedTo?: Prisma.PlaceListRelationFilter
 }
 
 export type PlaceOrderByWithRelationInput = {
@@ -280,11 +274,12 @@ export type PlaceOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   visitors?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
-  relatedPlaces?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
   events?: Prisma.EventOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
+  relatedPlaces?: Prisma.PlaceOrderByRelationAggregateInput
+  relatedTo?: Prisma.PlaceOrderByRelationAggregateInput
 }
 
 export type PlaceWhereUniqueInput = Prisma.AtLeast<{
@@ -293,16 +288,17 @@ export type PlaceWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PlaceWhereInput[]
   NOT?: Prisma.PlaceWhereInput | Prisma.PlaceWhereInput[]
   name?: Prisma.StringFilter<"Place"> | string
-  category?: Prisma.StringFilter<"Place"> | string
+  category?: Prisma.EnumCategoryFilter<"Place"> | $Enums.Category
   location?: Prisma.StringFilter<"Place"> | string
   description?: Prisma.StringFilter<"Place"> | string
   visitors?: Prisma.IntFilter<"Place"> | number
   image?: Prisma.StringFilter<"Place"> | string
-  latitude?: Prisma.FloatFilter<"Place"> | number
   longitude?: Prisma.FloatFilter<"Place"> | number
-  relatedPlaces?: Prisma.IntNullableListFilter<"Place">
+  latitude?: Prisma.FloatFilter<"Place"> | number
   events?: Prisma.EventListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
+  relatedPlaces?: Prisma.PlaceListRelationFilter
+  relatedTo?: Prisma.PlaceListRelationFilter
 }, "id">
 
 export type PlaceOrderByWithAggregationInput = {
@@ -313,9 +309,8 @@ export type PlaceOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   visitors?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
-  relatedPlaces?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
   _count?: Prisma.PlaceCountOrderByAggregateInput
   _avg?: Prisma.PlaceAvgOrderByAggregateInput
   _max?: Prisma.PlaceMaxOrderByAggregateInput
@@ -329,118 +324,120 @@ export type PlaceScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PlaceScalarWhereWithAggregatesInput | Prisma.PlaceScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Place"> | number
   name?: Prisma.StringWithAggregatesFilter<"Place"> | string
-  category?: Prisma.StringWithAggregatesFilter<"Place"> | string
+  category?: Prisma.EnumCategoryWithAggregatesFilter<"Place"> | $Enums.Category
   location?: Prisma.StringWithAggregatesFilter<"Place"> | string
   description?: Prisma.StringWithAggregatesFilter<"Place"> | string
   visitors?: Prisma.IntWithAggregatesFilter<"Place"> | number
   image?: Prisma.StringWithAggregatesFilter<"Place"> | string
-  latitude?: Prisma.FloatWithAggregatesFilter<"Place"> | number
   longitude?: Prisma.FloatWithAggregatesFilter<"Place"> | number
-  relatedPlaces?: Prisma.IntNullableListFilter<"Place">
+  latitude?: Prisma.FloatWithAggregatesFilter<"Place"> | number
 }
 
 export type PlaceCreateInput = {
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
-  visitors?: number
+  visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces?: Prisma.PlaceCreaterelatedPlacesInput | number[]
+  latitude: number
   events?: Prisma.EventCreateNestedManyWithoutPlaceInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceCreateNestedManyWithoutRelatedToInput
+  relatedTo?: Prisma.PlaceCreateNestedManyWithoutRelatedPlacesInput
 }
 
 export type PlaceUncheckedCreateInput = {
   id?: number
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
-  visitors?: number
+  visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces?: Prisma.PlaceCreaterelatedPlacesInput | number[]
+  latitude: number
   events?: Prisma.EventUncheckedCreateNestedManyWithoutPlaceInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedToInput
+  relatedTo?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedPlacesInput
 }
 
 export type PlaceUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   events?: Prisma.EventUpdateManyWithoutPlaceNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUpdateManyWithoutRelatedToNestedInput
+  relatedTo?: Prisma.PlaceUpdateManyWithoutRelatedPlacesNestedInput
 }
 
 export type PlaceUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   events?: Prisma.EventUncheckedUpdateManyWithoutPlaceNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedToNestedInput
+  relatedTo?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedPlacesNestedInput
 }
 
 export type PlaceCreateManyInput = {
   id?: number
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
-  visitors?: number
+  visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces?: Prisma.PlaceCreaterelatedPlacesInput | number[]
+  latitude: number
 }
 
 export type PlaceUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type PlaceUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
-export type IntNullableListFilter<$PrismaModel = never> = {
-  equals?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
-  has?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
-  hasEvery?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
-  hasSome?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
+export type PlaceListRelationFilter = {
+  every?: Prisma.PlaceWhereInput
+  some?: Prisma.PlaceWhereInput
+  none?: Prisma.PlaceWhereInput
+}
+
+export type PlaceOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type PlaceCountOrderByAggregateInput = {
@@ -451,17 +448,15 @@ export type PlaceCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   visitors?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
-  relatedPlaces?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
 }
 
 export type PlaceAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   visitors?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
-  relatedPlaces?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
 }
 
 export type PlaceMaxOrderByAggregateInput = {
@@ -472,8 +467,8 @@ export type PlaceMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   visitors?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
 }
 
 export type PlaceMinOrderByAggregateInput = {
@@ -484,16 +479,15 @@ export type PlaceMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   visitors?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
 }
 
 export type PlaceSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   visitors?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
-  relatedPlaces?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
 }
 
 export type PlaceScalarRelationFilter = {
@@ -501,12 +495,41 @@ export type PlaceScalarRelationFilter = {
   isNot?: Prisma.PlaceWhereInput
 }
 
-export type PlaceCreaterelatedPlacesInput = {
-  set: number[]
+export type PlaceNullableScalarRelationFilter = {
+  is?: Prisma.PlaceWhereInput | null
+  isNot?: Prisma.PlaceWhereInput | null
+}
+
+export type PlaceCreateNestedManyWithoutRelatedToInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedToInput, Prisma.PlaceUncheckedCreateWithoutRelatedToInput> | Prisma.PlaceCreateWithoutRelatedToInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedToInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedToInput | Prisma.PlaceCreateOrConnectWithoutRelatedToInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+}
+
+export type PlaceCreateNestedManyWithoutRelatedPlacesInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput> | Prisma.PlaceCreateWithoutRelatedPlacesInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput | Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+}
+
+export type PlaceUncheckedCreateNestedManyWithoutRelatedToInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedToInput, Prisma.PlaceUncheckedCreateWithoutRelatedToInput> | Prisma.PlaceCreateWithoutRelatedToInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedToInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedToInput | Prisma.PlaceCreateOrConnectWithoutRelatedToInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+}
+
+export type PlaceUncheckedCreateNestedManyWithoutRelatedPlacesInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput> | Prisma.PlaceCreateWithoutRelatedPlacesInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput | Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
 }
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type EnumCategoryFieldUpdateOperationsInput = {
+  set?: $Enums.Category
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -525,9 +548,56 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type PlaceUpdaterelatedPlacesInput = {
-  set?: number[]
-  push?: number | number[]
+export type PlaceUpdateManyWithoutRelatedToNestedInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedToInput, Prisma.PlaceUncheckedCreateWithoutRelatedToInput> | Prisma.PlaceCreateWithoutRelatedToInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedToInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedToInput | Prisma.PlaceCreateOrConnectWithoutRelatedToInput[]
+  upsert?: Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedToInput | Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedToInput[]
+  set?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  disconnect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  delete?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  update?: Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedToInput | Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedToInput[]
+  updateMany?: Prisma.PlaceUpdateManyWithWhereWithoutRelatedToInput | Prisma.PlaceUpdateManyWithWhereWithoutRelatedToInput[]
+  deleteMany?: Prisma.PlaceScalarWhereInput | Prisma.PlaceScalarWhereInput[]
+}
+
+export type PlaceUpdateManyWithoutRelatedPlacesNestedInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput> | Prisma.PlaceCreateWithoutRelatedPlacesInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput | Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput[]
+  upsert?: Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedPlacesInput | Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedPlacesInput[]
+  set?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  disconnect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  delete?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  update?: Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedPlacesInput | Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedPlacesInput[]
+  updateMany?: Prisma.PlaceUpdateManyWithWhereWithoutRelatedPlacesInput | Prisma.PlaceUpdateManyWithWhereWithoutRelatedPlacesInput[]
+  deleteMany?: Prisma.PlaceScalarWhereInput | Prisma.PlaceScalarWhereInput[]
+}
+
+export type PlaceUncheckedUpdateManyWithoutRelatedToNestedInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedToInput, Prisma.PlaceUncheckedCreateWithoutRelatedToInput> | Prisma.PlaceCreateWithoutRelatedToInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedToInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedToInput | Prisma.PlaceCreateOrConnectWithoutRelatedToInput[]
+  upsert?: Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedToInput | Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedToInput[]
+  set?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  disconnect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  delete?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  update?: Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedToInput | Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedToInput[]
+  updateMany?: Prisma.PlaceUpdateManyWithWhereWithoutRelatedToInput | Prisma.PlaceUpdateManyWithWhereWithoutRelatedToInput[]
+  deleteMany?: Prisma.PlaceScalarWhereInput | Prisma.PlaceScalarWhereInput[]
+}
+
+export type PlaceUncheckedUpdateManyWithoutRelatedPlacesNestedInput = {
+  create?: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput> | Prisma.PlaceCreateWithoutRelatedPlacesInput[] | Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput[]
+  connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput | Prisma.PlaceCreateOrConnectWithoutRelatedPlacesInput[]
+  upsert?: Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedPlacesInput | Prisma.PlaceUpsertWithWhereUniqueWithoutRelatedPlacesInput[]
+  set?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  disconnect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  delete?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  connect?: Prisma.PlaceWhereUniqueInput | Prisma.PlaceWhereUniqueInput[]
+  update?: Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedPlacesInput | Prisma.PlaceUpdateWithWhereUniqueWithoutRelatedPlacesInput[]
+  updateMany?: Prisma.PlaceUpdateManyWithWhereWithoutRelatedPlacesInput | Prisma.PlaceUpdateManyWithWhereWithoutRelatedPlacesInput[]
+  deleteMany?: Prisma.PlaceScalarWhereInput | Prisma.PlaceScalarWhereInput[]
 }
 
 export type PlaceCreateNestedOneWithoutEventsInput = {
@@ -550,39 +620,158 @@ export type PlaceCreateNestedOneWithoutReviewsInput = {
   connect?: Prisma.PlaceWhereUniqueInput
 }
 
-export type PlaceUpdateOneRequiredWithoutReviewsNestedInput = {
+export type PlaceUpdateOneWithoutReviewsNestedInput = {
   create?: Prisma.XOR<Prisma.PlaceCreateWithoutReviewsInput, Prisma.PlaceUncheckedCreateWithoutReviewsInput>
   connectOrCreate?: Prisma.PlaceCreateOrConnectWithoutReviewsInput
   upsert?: Prisma.PlaceUpsertWithoutReviewsInput
+  disconnect?: Prisma.PlaceWhereInput | boolean
+  delete?: Prisma.PlaceWhereInput | boolean
   connect?: Prisma.PlaceWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlaceUpdateToOneWithWhereWithoutReviewsInput, Prisma.PlaceUpdateWithoutReviewsInput>, Prisma.PlaceUncheckedUpdateWithoutReviewsInput>
 }
 
-export type PlaceCreateWithoutEventsInput = {
+export type PlaceCreateWithoutRelatedToInput = {
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
-  visitors?: number
+  visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces?: Prisma.PlaceCreaterelatedPlacesInput | number[]
+  latitude: number
+  events?: Prisma.EventCreateNestedManyWithoutPlaceInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceCreateNestedManyWithoutRelatedToInput
+}
+
+export type PlaceUncheckedCreateWithoutRelatedToInput = {
+  id?: number
+  name: string
+  category: $Enums.Category
+  location: string
+  description: string
+  visitors: number
+  image: string
+  longitude: number
+  latitude: number
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutPlaceInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedToInput
+}
+
+export type PlaceCreateOrConnectWithoutRelatedToInput = {
+  where: Prisma.PlaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedToInput, Prisma.PlaceUncheckedCreateWithoutRelatedToInput>
+}
+
+export type PlaceCreateWithoutRelatedPlacesInput = {
+  name: string
+  category: $Enums.Category
+  location: string
+  description: string
+  visitors: number
+  image: string
+  longitude: number
+  latitude: number
+  events?: Prisma.EventCreateNestedManyWithoutPlaceInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutPlaceInput
+  relatedTo?: Prisma.PlaceCreateNestedManyWithoutRelatedPlacesInput
+}
+
+export type PlaceUncheckedCreateWithoutRelatedPlacesInput = {
+  id?: number
+  name: string
+  category: $Enums.Category
+  location: string
+  description: string
+  visitors: number
+  image: string
+  longitude: number
+  latitude: number
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutPlaceInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlaceInput
+  relatedTo?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedPlacesInput
+}
+
+export type PlaceCreateOrConnectWithoutRelatedPlacesInput = {
+  where: Prisma.PlaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput>
+}
+
+export type PlaceUpsertWithWhereUniqueWithoutRelatedToInput = {
+  where: Prisma.PlaceWhereUniqueInput
+  update: Prisma.XOR<Prisma.PlaceUpdateWithoutRelatedToInput, Prisma.PlaceUncheckedUpdateWithoutRelatedToInput>
+  create: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedToInput, Prisma.PlaceUncheckedCreateWithoutRelatedToInput>
+}
+
+export type PlaceUpdateWithWhereUniqueWithoutRelatedToInput = {
+  where: Prisma.PlaceWhereUniqueInput
+  data: Prisma.XOR<Prisma.PlaceUpdateWithoutRelatedToInput, Prisma.PlaceUncheckedUpdateWithoutRelatedToInput>
+}
+
+export type PlaceUpdateManyWithWhereWithoutRelatedToInput = {
+  where: Prisma.PlaceScalarWhereInput
+  data: Prisma.XOR<Prisma.PlaceUpdateManyMutationInput, Prisma.PlaceUncheckedUpdateManyWithoutRelatedToInput>
+}
+
+export type PlaceScalarWhereInput = {
+  AND?: Prisma.PlaceScalarWhereInput | Prisma.PlaceScalarWhereInput[]
+  OR?: Prisma.PlaceScalarWhereInput[]
+  NOT?: Prisma.PlaceScalarWhereInput | Prisma.PlaceScalarWhereInput[]
+  id?: Prisma.IntFilter<"Place"> | number
+  name?: Prisma.StringFilter<"Place"> | string
+  category?: Prisma.EnumCategoryFilter<"Place"> | $Enums.Category
+  location?: Prisma.StringFilter<"Place"> | string
+  description?: Prisma.StringFilter<"Place"> | string
+  visitors?: Prisma.IntFilter<"Place"> | number
+  image?: Prisma.StringFilter<"Place"> | string
+  longitude?: Prisma.FloatFilter<"Place"> | number
+  latitude?: Prisma.FloatFilter<"Place"> | number
+}
+
+export type PlaceUpsertWithWhereUniqueWithoutRelatedPlacesInput = {
+  where: Prisma.PlaceWhereUniqueInput
+  update: Prisma.XOR<Prisma.PlaceUpdateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedUpdateWithoutRelatedPlacesInput>
+  create: Prisma.XOR<Prisma.PlaceCreateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedCreateWithoutRelatedPlacesInput>
+}
+
+export type PlaceUpdateWithWhereUniqueWithoutRelatedPlacesInput = {
+  where: Prisma.PlaceWhereUniqueInput
+  data: Prisma.XOR<Prisma.PlaceUpdateWithoutRelatedPlacesInput, Prisma.PlaceUncheckedUpdateWithoutRelatedPlacesInput>
+}
+
+export type PlaceUpdateManyWithWhereWithoutRelatedPlacesInput = {
+  where: Prisma.PlaceScalarWhereInput
+  data: Prisma.XOR<Prisma.PlaceUpdateManyMutationInput, Prisma.PlaceUncheckedUpdateManyWithoutRelatedPlacesInput>
+}
+
+export type PlaceCreateWithoutEventsInput = {
+  name: string
+  category: $Enums.Category
+  location: string
+  description: string
+  visitors: number
+  image: string
+  longitude: number
+  latitude: number
+  reviews?: Prisma.ReviewCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceCreateNestedManyWithoutRelatedToInput
+  relatedTo?: Prisma.PlaceCreateNestedManyWithoutRelatedPlacesInput
 }
 
 export type PlaceUncheckedCreateWithoutEventsInput = {
   id?: number
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
-  visitors?: number
+  visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces?: Prisma.PlaceCreaterelatedPlacesInput | number[]
+  latitude: number
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedToInput
+  relatedTo?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedPlacesInput
 }
 
 export type PlaceCreateOrConnectWithoutEventsInput = {
@@ -603,56 +792,60 @@ export type PlaceUpdateToOneWithWhereWithoutEventsInput = {
 
 export type PlaceUpdateWithoutEventsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.ReviewUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUpdateManyWithoutRelatedToNestedInput
+  relatedTo?: Prisma.PlaceUpdateManyWithoutRelatedPlacesNestedInput
 }
 
 export type PlaceUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedToNestedInput
+  relatedTo?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedPlacesNestedInput
 }
 
 export type PlaceCreateWithoutReviewsInput = {
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
-  visitors?: number
+  visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces?: Prisma.PlaceCreaterelatedPlacesInput | number[]
+  latitude: number
   events?: Prisma.EventCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceCreateNestedManyWithoutRelatedToInput
+  relatedTo?: Prisma.PlaceCreateNestedManyWithoutRelatedPlacesInput
 }
 
 export type PlaceUncheckedCreateWithoutReviewsInput = {
   id?: number
   name: string
-  category: string
+  category: $Enums.Category
   location: string
   description: string
-  visitors?: number
+  visitors: number
   image: string
-  latitude: number
   longitude: number
-  relatedPlaces?: Prisma.PlaceCreaterelatedPlacesInput | number[]
+  latitude: number
   events?: Prisma.EventUncheckedCreateNestedManyWithoutPlaceInput
+  relatedPlaces?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedToInput
+  relatedTo?: Prisma.PlaceUncheckedCreateNestedManyWithoutRelatedPlacesInput
 }
 
 export type PlaceCreateOrConnectWithoutReviewsInput = {
@@ -673,29 +866,113 @@ export type PlaceUpdateToOneWithWhereWithoutReviewsInput = {
 
 export type PlaceUpdateWithoutReviewsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   events?: Prisma.EventUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUpdateManyWithoutRelatedToNestedInput
+  relatedTo?: Prisma.PlaceUpdateManyWithoutRelatedPlacesNestedInput
 }
 
 export type PlaceUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   location?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visitors?: Prisma.IntFieldUpdateOperationsInput | number
   image?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
-  relatedPlaces?: Prisma.PlaceUpdaterelatedPlacesInput | number[]
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   events?: Prisma.EventUncheckedUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedToNestedInput
+  relatedTo?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedPlacesNestedInput
+}
+
+export type PlaceUpdateWithoutRelatedToInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  visitors?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  events?: Prisma.EventUpdateManyWithoutPlaceNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUpdateManyWithoutRelatedToNestedInput
+}
+
+export type PlaceUncheckedUpdateWithoutRelatedToInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  visitors?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  events?: Prisma.EventUncheckedUpdateManyWithoutPlaceNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlaceNestedInput
+  relatedPlaces?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedToNestedInput
+}
+
+export type PlaceUncheckedUpdateManyWithoutRelatedToInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  visitors?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+}
+
+export type PlaceUpdateWithoutRelatedPlacesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  visitors?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  events?: Prisma.EventUpdateManyWithoutPlaceNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPlaceNestedInput
+  relatedTo?: Prisma.PlaceUpdateManyWithoutRelatedPlacesNestedInput
+}
+
+export type PlaceUncheckedUpdateWithoutRelatedPlacesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  visitors?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  events?: Prisma.EventUncheckedUpdateManyWithoutPlaceNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlaceNestedInput
+  relatedTo?: Prisma.PlaceUncheckedUpdateManyWithoutRelatedPlacesNestedInput
+}
+
+export type PlaceUncheckedUpdateManyWithoutRelatedPlacesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  visitors?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 
@@ -706,11 +983,15 @@ export type PlaceUncheckedUpdateWithoutReviewsInput = {
 export type PlaceCountOutputType = {
   events: number
   reviews: number
+  relatedPlaces: number
+  relatedTo: number
 }
 
 export type PlaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | PlaceCountOutputTypeCountEventsArgs
   reviews?: boolean | PlaceCountOutputTypeCountReviewsArgs
+  relatedPlaces?: boolean | PlaceCountOutputTypeCountRelatedPlacesArgs
+  relatedTo?: boolean | PlaceCountOutputTypeCountRelatedToArgs
 }
 
 /**
@@ -737,6 +1018,20 @@ export type PlaceCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.ReviewWhereInput
 }
 
+/**
+ * PlaceCountOutputType without action
+ */
+export type PlaceCountOutputTypeCountRelatedPlacesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlaceWhereInput
+}
+
+/**
+ * PlaceCountOutputType without action
+ */
+export type PlaceCountOutputTypeCountRelatedToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlaceWhereInput
+}
+
 
 export type PlaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -746,11 +1041,12 @@ export type PlaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   description?: boolean
   visitors?: boolean
   image?: boolean
-  latitude?: boolean
   longitude?: boolean
-  relatedPlaces?: boolean
+  latitude?: boolean
   events?: boolean | Prisma.Place$eventsArgs<ExtArgs>
   reviews?: boolean | Prisma.Place$reviewsArgs<ExtArgs>
+  relatedPlaces?: boolean | Prisma.Place$relatedPlacesArgs<ExtArgs>
+  relatedTo?: boolean | Prisma.Place$relatedToArgs<ExtArgs>
   _count?: boolean | Prisma.PlaceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["place"]>
 
@@ -762,9 +1058,8 @@ export type PlaceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   visitors?: boolean
   image?: boolean
-  latitude?: boolean
   longitude?: boolean
-  relatedPlaces?: boolean
+  latitude?: boolean
 }, ExtArgs["result"]["place"]>
 
 export type PlaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -775,9 +1070,8 @@ export type PlaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   visitors?: boolean
   image?: boolean
-  latitude?: boolean
   longitude?: boolean
-  relatedPlaces?: boolean
+  latitude?: boolean
 }, ExtArgs["result"]["place"]>
 
 export type PlaceSelectScalar = {
@@ -788,15 +1082,16 @@ export type PlaceSelectScalar = {
   description?: boolean
   visitors?: boolean
   image?: boolean
-  latitude?: boolean
   longitude?: boolean
-  relatedPlaces?: boolean
+  latitude?: boolean
 }
 
-export type PlaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "category" | "location" | "description" | "visitors" | "image" | "latitude" | "longitude" | "relatedPlaces", ExtArgs["result"]["place"]>
+export type PlaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "category" | "location" | "description" | "visitors" | "image" | "longitude" | "latitude", ExtArgs["result"]["place"]>
 export type PlaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.Place$eventsArgs<ExtArgs>
   reviews?: boolean | Prisma.Place$reviewsArgs<ExtArgs>
+  relatedPlaces?: boolean | Prisma.Place$relatedPlacesArgs<ExtArgs>
+  relatedTo?: boolean | Prisma.Place$relatedToArgs<ExtArgs>
   _count?: boolean | Prisma.PlaceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PlaceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -807,18 +1102,19 @@ export type $PlacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     events: Prisma.$EventPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
+    relatedPlaces: Prisma.$PlacePayload<ExtArgs>[]
+    relatedTo: Prisma.$PlacePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
-    category: string
+    category: $Enums.Category
     location: string
     description: string
     visitors: number
     image: string
-    latitude: number
     longitude: number
-    relatedPlaces: number[]
+    latitude: number
   }, ExtArgs["result"]["place"]>
   composites: {}
 }
@@ -1215,6 +1511,8 @@ export interface Prisma__PlaceClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   events<T extends Prisma.Place$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Place$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Place$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Place$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  relatedPlaces<T extends Prisma.Place$relatedPlacesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Place$relatedPlacesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  relatedTo<T extends Prisma.Place$relatedToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Place$relatedToArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1246,14 +1544,13 @@ export interface Prisma__PlaceClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface PlaceFieldRefs {
   readonly id: Prisma.FieldRef<"Place", 'Int'>
   readonly name: Prisma.FieldRef<"Place", 'String'>
-  readonly category: Prisma.FieldRef<"Place", 'String'>
+  readonly category: Prisma.FieldRef<"Place", 'Category'>
   readonly location: Prisma.FieldRef<"Place", 'String'>
   readonly description: Prisma.FieldRef<"Place", 'String'>
   readonly visitors: Prisma.FieldRef<"Place", 'Int'>
   readonly image: Prisma.FieldRef<"Place", 'String'>
-  readonly latitude: Prisma.FieldRef<"Place", 'Float'>
   readonly longitude: Prisma.FieldRef<"Place", 'Float'>
-  readonly relatedPlaces: Prisma.FieldRef<"Place", 'Int[]'>
+  readonly latitude: Prisma.FieldRef<"Place", 'Float'>
 }
     
 
@@ -1687,6 +1984,54 @@ export type Place$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
+}
+
+/**
+ * Place.relatedPlaces
+ */
+export type Place$relatedPlacesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Place
+   */
+  select?: Prisma.PlaceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Place
+   */
+  omit?: Prisma.PlaceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlaceInclude<ExtArgs> | null
+  where?: Prisma.PlaceWhereInput
+  orderBy?: Prisma.PlaceOrderByWithRelationInput | Prisma.PlaceOrderByWithRelationInput[]
+  cursor?: Prisma.PlaceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlaceScalarFieldEnum | Prisma.PlaceScalarFieldEnum[]
+}
+
+/**
+ * Place.relatedTo
+ */
+export type Place$relatedToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Place
+   */
+  select?: Prisma.PlaceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Place
+   */
+  omit?: Prisma.PlaceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlaceInclude<ExtArgs> | null
+  where?: Prisma.PlaceWhereInput
+  orderBy?: Prisma.PlaceOrderByWithRelationInput | Prisma.PlaceOrderByWithRelationInput[]
+  cursor?: Prisma.PlaceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlaceScalarFieldEnum | Prisma.PlaceScalarFieldEnum[]
 }
 
 /**

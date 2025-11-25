@@ -11,5 +11,4 @@
 export type * from './models/Place'
 export type * from './models/Event'
 export type * from './models/Review'
-export type * from './models/User'
 export type * from './commonInputTypes'

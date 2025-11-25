@@ -25,8 +25,8 @@ export const STATIC_PLACES: Place[] = [
 		reviews: [
 			{
 				id: 1,
-				userId: 1,
-				user: "John Doe",
+				userId: "1",
+				userName: "John Doe",
 				avatar: "/avatar.png",
 				date: "12 November 2025",
 				visitCount: 128,
@@ -42,8 +42,8 @@ export const STATIC_PLACES: Place[] = [
 			},
 			{
 				id: 2,
-				userId: 1,
-				user: "Jane Smith",
+				userId: "1",
+				userName: "Jane Smith",
 				avatar: "/avatar.png",
 				date: "10 November 2025",
 				visitCount: 45,
@@ -53,8 +53,7 @@ export const STATIC_PLACES: Place[] = [
 				images: [],
 			},
 		],
-		longitude: 106.8272,
-		latitude: -6.1754,
+		coordinates: [106.8272, -6.1754],
 	},
 	{
 		id: 2,
@@ -67,8 +66,7 @@ export const STATIC_PLACES: Place[] = [
 		events: [],
 		relatedPlaces: [1, 3],
 		reviews: [],
-		longitude: 106.8133,
-		latitude: -6.1352,
+		coordinates: [106.8133, -6.1352],
 	},
 	{
 		id: 3,
@@ -81,8 +79,7 @@ export const STATIC_PLACES: Place[] = [
 		events: [],
 		relatedPlaces: [1, 2],
 		reviews: [],
-		longitude: 106.813,
-		latitude: -6.134,
+		coordinates: [106.813, -6.134],
 	},
 	{
 		id: 4,
@@ -95,8 +92,7 @@ export const STATIC_PLACES: Place[] = [
 		events: [],
 		relatedPlaces: [1],
 		reviews: [],
-		longitude: 106.8314,
-		latitude: -6.1702,
+		coordinates: [106.8314, -6.1702],
 	},
 	{
 		id: 5,
@@ -109,8 +105,7 @@ export const STATIC_PLACES: Place[] = [
 		events: [],
 		relatedPlaces: [],
 		reviews: [],
-		longitude: 110.2038,
-		latitude: -7.6079,
+		coordinates: [110.2038, -7.6079],
 	},
 	{
 		id: 6,
@@ -123,7 +118,6 @@ export const STATIC_PLACES: Place[] = [
 		events: [],
 		relatedPlaces: [],
 		reviews: [],
-		longitude: 107.6187,
-		latitude: -6.9025,
+		coordinates: [107.6187, -6.9025],
 	},
 ];
