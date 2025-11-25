@@ -8,14 +8,15 @@ datasource db {
 }
 
 model Place {
-    id            Int     @id @default(autoincrement())
+    id            Int    @id @default(autoincrement())
     name          String
     category      String
     location      String
     description   String
-    visitors      String
+    visitors      Int    @default(0)
     image         String
-    coordinates   Float[]
+    latitude      Float
+    longitude     Float
     relatedPlaces Int[]
 
     events  Event[]
@@ -23,12 +24,12 @@ model Place {
 }
 
 model Event {
-    id          Int    @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
     title       String
-    date        String
+    date        DateTime
     description String
     placeId     Int
-    place       Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+    place       Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
 }
 
 model Review {
@@ -36,7 +37,7 @@ model Review {
     userId     Int
     user       String
     avatar     String
-    date       String
+    date       DateTime
     visitCount Int
     content    String
     rating     Int

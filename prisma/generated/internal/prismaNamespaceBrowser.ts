@@ -81,7 +81,8 @@ export const PlaceScalarFieldEnum = {
   description: 'description',
   visitors: 'visitors',
   image: 'image',
-  coordinates: 'coordinates',
+  latitude: 'latitude',
+  longitude: 'longitude',
   relatedPlaces: 'relatedPlaces'
 } as const
 

@@ -750,7 +750,8 @@ export const PlaceScalarFieldEnum = {
   description: 'description',
   visitors: 'visitors',
   image: 'image',
-  coordinates: 'coordinates',
+  latitude: 'latitude',
+  longitude: 'longitude',
   relatedPlaces: 'relatedPlaces'
 } as const
 
@@ -854,16 +855,16 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Float[]'
+ * Reference to a field of type 'Float'
  */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
 /**
- * Reference to a field of type 'Float'
+ * Reference to a field of type 'Float[]'
  */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 

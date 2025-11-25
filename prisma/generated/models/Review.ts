@@ -47,7 +47,7 @@ export type ReviewMinAggregateOutputType = {
   userId: number | null
   user: string | null
   avatar: string | null
-  date: string | null
+  date: Date | null
   visitCount: number | null
   content: string | null
   rating: number | null
@@ -59,7 +59,7 @@ export type ReviewMaxAggregateOutputType = {
   userId: number | null
   user: string | null
   avatar: string | null
-  date: string | null
+  date: Date | null
   visitCount: number | null
   content: string | null
   rating: number | null
@@ -226,7 +226,7 @@ export type ReviewGroupByOutputType = {
   userId: number
   user: string
   avatar: string
-  date: string
+  date: Date
   visitCount: number
   content: string
   rating: number
@@ -262,7 +262,7 @@ export type ReviewWhereInput = {
   userId?: Prisma.IntFilter<"Review"> | number
   user?: Prisma.StringFilter<"Review"> | string
   avatar?: Prisma.StringFilter<"Review"> | string
-  date?: Prisma.StringFilter<"Review"> | string
+  date?: Prisma.DateTimeFilter<"Review"> | Date | string
   visitCount?: Prisma.IntFilter<"Review"> | number
   content?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
@@ -293,7 +293,7 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.IntFilter<"Review"> | number
   user?: Prisma.StringFilter<"Review"> | string
   avatar?: Prisma.StringFilter<"Review"> | string
-  date?: Prisma.StringFilter<"Review"> | string
+  date?: Prisma.DateTimeFilter<"Review"> | Date | string
   visitCount?: Prisma.IntFilter<"Review"> | number
   content?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
@@ -328,7 +328,7 @@ export type ReviewScalarWhereWithAggregatesInput = {
   userId?: Prisma.IntWithAggregatesFilter<"Review"> | number
   user?: Prisma.StringWithAggregatesFilter<"Review"> | string
   avatar?: Prisma.StringWithAggregatesFilter<"Review"> | string
-  date?: Prisma.StringWithAggregatesFilter<"Review"> | string
+  date?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
   visitCount?: Prisma.IntWithAggregatesFilter<"Review"> | number
   content?: Prisma.StringWithAggregatesFilter<"Review"> | string
   rating?: Prisma.IntWithAggregatesFilter<"Review"> | number
@@ -340,7 +340,7 @@ export type ReviewCreateInput = {
   userId: number
   user: string
   avatar: string
-  date: string
+  date: Date | string
   visitCount: number
   content: string
   rating: number
@@ -353,7 +353,7 @@ export type ReviewUncheckedCreateInput = {
   userId: number
   user: string
   avatar: string
-  date: string
+  date: Date | string
   visitCount: number
   content: string
   rating: number
@@ -365,7 +365,7 @@ export type ReviewUpdateInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
@@ -378,7 +378,7 @@ export type ReviewUncheckedUpdateInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
@@ -391,7 +391,7 @@ export type ReviewCreateManyInput = {
   userId: number
   user: string
   avatar: string
-  date: string
+  date: Date | string
   visitCount: number
   content: string
   rating: number
@@ -403,7 +403,7 @@ export type ReviewUpdateManyMutationInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
@@ -415,7 +415,7 @@ export type ReviewUncheckedUpdateManyInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
@@ -549,7 +549,7 @@ export type ReviewCreateWithoutPlaceInput = {
   userId: number
   user: string
   avatar: string
-  date: string
+  date: Date | string
   visitCount: number
   content: string
   rating: number
@@ -561,7 +561,7 @@ export type ReviewUncheckedCreateWithoutPlaceInput = {
   userId: number
   user: string
   avatar: string
-  date: string
+  date: Date | string
   visitCount: number
   content: string
   rating: number
@@ -602,7 +602,7 @@ export type ReviewScalarWhereInput = {
   userId?: Prisma.IntFilter<"Review"> | number
   user?: Prisma.StringFilter<"Review"> | string
   avatar?: Prisma.StringFilter<"Review"> | string
-  date?: Prisma.StringFilter<"Review"> | string
+  date?: Prisma.DateTimeFilter<"Review"> | Date | string
   visitCount?: Prisma.IntFilter<"Review"> | number
   content?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
@@ -615,7 +615,7 @@ export type ReviewCreateManyPlaceInput = {
   userId: number
   user: string
   avatar: string
-  date: string
+  date: Date | string
   visitCount: number
   content: string
   rating: number
@@ -626,7 +626,7 @@ export type ReviewUpdateWithoutPlaceInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
@@ -638,7 +638,7 @@ export type ReviewUncheckedUpdateWithoutPlaceInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
@@ -650,7 +650,7 @@ export type ReviewUncheckedUpdateManyWithoutPlaceInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
@@ -735,7 +735,7 @@ export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     userId: number
     user: string
     avatar: string
-    date: string
+    date: Date
     visitCount: number
     content: string
     rating: number
@@ -1169,7 +1169,7 @@ export interface ReviewFieldRefs {
   readonly userId: Prisma.FieldRef<"Review", 'Int'>
   readonly user: Prisma.FieldRef<"Review", 'String'>
   readonly avatar: Prisma.FieldRef<"Review", 'String'>
-  readonly date: Prisma.FieldRef<"Review", 'String'>
+  readonly date: Prisma.FieldRef<"Review", 'DateTime'>
   readonly visitCount: Prisma.FieldRef<"Review", 'Int'>
   readonly content: Prisma.FieldRef<"Review", 'String'>
   readonly rating: Prisma.FieldRef<"Review", 'Int'>
