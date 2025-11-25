@@ -10,5 +10,53 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
+}
+
+enum Category {
+  Bangunan
+  Situs
+  Struktur
+  Kawasan
+}
+
+model Place {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    Category
+  location    String
+  description String   @db.Text
+  visitors    Int
+  image       String
+
+  longitude Float
+  latitude  Float
+
+  events  Event[]
+  reviews Review[]
+
+  relatedPlaces Place[] @relation("RelatedPlaces")
+  relatedTo     Place[] @relation("RelatedPlaces")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  date        DateTime
+  description String   @db.Text
+  place       Place    @relation(fields: [placeId], references: [id])
+  placeId     Int
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  avatar     String
+  date       DateTime
+  visitCount Int
+  content    String   @db.Text
+  rating     Int
+  images     Json
+  place      Place?   @relation(fields: [placeId], references: [id])
+  placeId    Int?
 }
