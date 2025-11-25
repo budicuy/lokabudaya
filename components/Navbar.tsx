@@ -1,3 +1,5 @@
+import {SignInButton, SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
+
 export const Navbar = () => {
 	return (
 		<nav className="h-14 bg-white flex items-center justify-between px-4 z-20 border-b-2 border-slate-300">
@@ -13,8 +15,18 @@ export const Navbar = () => {
 				</svg>
 			</div>
 			<div className="flex items-center gap-2">
-				<span className="text-sm text-gray-700 hidden md:inline">Menu</span>
-				<span className="text-sm text-gray-700 hidden md:inline">Menu</span>
+				<SignedIn>
+					<UserButton />
+				</SignedIn>
+				<SignedOut>
+					<SignInButton mode="modal">
+						<button
+							type="button"
+							className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors">
+							Login
+						</button>
+					</SignInButton>
+				</SignedOut>
 			</div>
 		</nav>
 	);
