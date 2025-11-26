@@ -14,6 +14,16 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
 	return (
 		<html lang="en">
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				{/* SVG Filter for Metaball/Goo effect */}
+				<svg style={{position: "absolute", width: 0, height: 0}} aria-hidden="true">
+					<defs>
+						<filter id="goo">
+							<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+							<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+							<feComposite in="SourceGraphic" in2="goo" operator="atop" />
+						</filter>
+					</defs>
+				</svg>
 				<ClerkProvider>{children}</ClerkProvider>
 			</body>
 		</html>
