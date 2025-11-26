@@ -1,6 +1,7 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
+import {Suspense, useEffect, useRef, useState} from "react";
+import {useSearchParams} from "next/navigation";
 import {createRoot} from "react-dom/client";
 import {FilterPanel} from "@/components/FilterPanel";
 import {JejakBudaya} from "@/components/JejakBudaya";
@@ -15,7 +16,8 @@ import {useMapbox} from "@/hooks/useMapbox";
 import {usePlacesFilter} from "@/hooks/usePlacesFilter";
 import type {Place} from "@/types";
 
-export default function MapBox3D() {
+function MapContent() {
+	const searchParams = useSearchParams();
 	const {
 		mapContainer,
 		map,
@@ -48,9 +50,11 @@ export default function MapBox3D() {
 	const [jejakBudayaOpen, setJejakBudayaOpen] = useState(false);
 	const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/standard");
 	const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+	// biome-ignore lint/suspicious/noExplicitAny: mapbox marker type
 	const markersRef = useRef<Map<number, any>>(new Map());
 
 	// Sync selectedPlace with updated places data
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only trigger on places change
 	useEffect(() => {
 		if (selectedPlace) {
 			const updatedPlace = places.find((p) => p.id === selectedPlace.id);
@@ -98,6 +102,7 @@ export default function MapBox3D() {
 		}
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: markers update on map/loaded/filteredPlaces change
 	useEffect(() => {
 		if (!map.current || !loaded) return;
 
@@ -144,6 +149,25 @@ export default function MapBox3D() {
 			markersRef.current.set(place.id, marker);
 		});
 	}, [map, loaded, filteredPlaces]);
+
+	// Handle navigation from chatbot with query params
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only trigger when map is loaded and places are available
+	useEffect(() => {
+		if (!loaded || places.length === 0) return;
+
+		const placeId = searchParams.get("placeId");
+		if (placeId) {
+			const place = places.find((p) => p.id === Number(placeId));
+			if (place) {
+				// Delay to ensure markers are rendered
+				setTimeout(() => {
+					handlePlaceClick(place);
+				}, 500);
+				// Clear the query params after navigation
+				window.history.replaceState({}, "", "/");
+			}
+		}
+	}, [loaded, places, searchParams]);
 
 	return (
 		<div className="w-full h-screen flex flex-col bg-white">
@@ -224,5 +248,17 @@ export default function MapBox3D() {
 				)}
 			</div>
 		</div>
+	);
+}
+
+export default function MapBox3D() {
+	return (
+		<Suspense fallback={
+			<div className="w-full h-screen flex items-center justify-center bg-gray-100">
+				<p className="text-gray-600">Loading...</p>
+			</div>
+		}>
+			<MapContent />
+		</Suspense>
 	);
 }
