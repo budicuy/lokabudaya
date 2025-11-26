@@ -148,22 +148,54 @@ function MapContent() {
 
 				if (!markersRef.current.has(markerId)) {
 					// Create cluster marker element
+					const count = props.point_count;
+
+					// Wrapper for positioning (Mapbox handles this)
 					const el = document.createElement("div");
-					el.className = "cluster-marker";
-					el.style.width = "50px";
-					el.style.height = "50px";
-					el.style.borderRadius = "50%";
-					el.style.backgroundColor = "#1e3a5f";
-					el.style.border = "3px solid white";
-					el.style.display = "flex";
-					el.style.alignItems = "center";
-					el.style.justifyContent = "center";
-					el.style.color = "white";
-					el.style.fontWeight = "bold";
-					el.style.fontSize = "14px";
-					el.style.cursor = "pointer";
-					el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
-					el.textContent = String(props.point_count);
+					el.className = "cluster-marker-wrapper";
+
+					// Content container for styling and animation
+					const content = document.createElement("div");
+					content.className = "cool-cluster-marker";
+
+					// Determine size and color based on count
+					let size = 40;
+					let background = "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"; // Blue/Cyan
+
+					if (count >= 50) {
+						size = 60;
+						background = "linear-gradient(135deg, #ff0844 0%, #ffb199 100%)"; // Red/Pink
+					} else if (count >= 10) {
+						size = 50;
+						background = "linear-gradient(135deg, #f6d365 0%, #fda085 100%)"; // Orange/Yellow
+					}
+
+					// Apply styles to content
+					content.style.width = `${size}px`;
+					content.style.height = `${size}px`;
+					content.style.background = background;
+					content.style.borderRadius = "50%";
+					content.style.position = "relative";
+					content.style.display = "flex";
+					content.style.alignItems = "center";
+					content.style.justifyContent = "center";
+					content.style.color = "white";
+					content.style.fontWeight = "bold";
+					content.style.cursor = "pointer";
+					content.style.transition = "transform 0.2s ease";
+
+					// Pulse animation element
+					const pulse = document.createElement("div");
+					pulse.className = "cluster-pulse";
+					content.appendChild(pulse);
+
+					// Inner content
+					const inner = document.createElement("div");
+					inner.className = "cool-cluster-inner";
+					inner.textContent = String(count);
+					content.appendChild(inner);
+
+					el.appendChild(content);
 
 					// Click to zoom into cluster
 					const clusterId = props.cluster_id;
@@ -172,13 +204,49 @@ function MapContent() {
 						currentMap.easeTo({center: coords, zoom: expansionZoom});
 					});
 
+					// Hover effect on content, NOT on el (which Mapbox transforms)
+					el.addEventListener("mouseenter", () => {
+						content.style.transform = "scale(1.1)";
+						el.style.zIndex = "10";
+					});
+					el.addEventListener("mouseleave", () => {
+						content.style.transform = "scale(1)";
+						el.style.zIndex = "auto";
+					});
+
 					const marker = new mapboxgl.Marker(el).setLngLat(coords).addTo(currentMap);
 					markersRef.current.set(markerId, marker);
 				} else {
 					// Update existing cluster marker position and count
 					const marker = markersRef.current.get(markerId);
 					marker.setLngLat(coords);
-					marker.getElement().textContent = String(props.point_count);
+
+					const count = props.point_count;
+					const el = marker.getElement();
+					const content = el.querySelector(".cool-cluster-marker") as HTMLElement;
+
+					if (content) {
+						// Update styles based on new count
+						let size = 40;
+						let background = "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"; // Blue/Cyan
+
+						if (count >= 50) {
+							size = 60;
+							background = "linear-gradient(135deg, #ff0844 0%, #ffb199 100%)"; // Red/Pink
+						} else if (count >= 10) {
+							size = 50;
+							background = "linear-gradient(135deg, #f6d365 0%, #fda085 100%)"; // Orange/Yellow
+						}
+
+						content.style.width = `${size}px`;
+						content.style.height = `${size}px`;
+						content.style.background = background;
+
+						const inner = content.querySelector(".cool-cluster-inner");
+						if (inner) {
+							inner.textContent = String(count);
+						}
+					}
 				}
 			} else {
 				// Handle individual place marker
