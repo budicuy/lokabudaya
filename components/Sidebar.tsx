@@ -1,6 +1,6 @@
 "use client";
 
-import {LayoutDashboard, Map as MapIcon, MessageCircle, Moon, Route, Settings, Trash2} from "lucide-react";
+import {LayoutDashboard, Map as MapIcon, MessageCircle, Moon, Route, Settings, Store} from "lucide-react";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {SignedIn, UserButton} from "@clerk/nextjs";
@@ -75,14 +75,8 @@ export const Sidebar = ({searchOpen, setSearchOpen, jejakBudayaOpen, setJejakBud
 				<button
 					className="w-10 h-10 hover:bg-gray-100 rounded-lg flex items-center justify-center text-gray-600"
 					type="button">
-					<Trash2 className="w-5 h-5" />
+					<Store className="w-5 h-5" />
 				</button>
-				<Link
-					href="/dashboard"
-					className="w-10 h-10 hover:bg-gray-100 rounded-lg flex items-center justify-center text-gray-600"
-					title="Dashboard">
-					<LayoutDashboard className="w-5 h-5" />
-				</Link>
 			</div>
 			<div className="flex flex-col items-center py-4 gap-4">
 				<button
