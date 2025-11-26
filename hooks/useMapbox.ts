@@ -14,8 +14,8 @@ export const useMapbox = () => {
 	const [loaded, setLoaded] = useState(false);
 
 	// State untuk mengontrol visibilitas label
-	const [showPlaceLabels, setShowPlaceLabels] = useState(false);
-	const [showRoadLabels, setShowRoadLabels] = useState(false);
+	const [showPlaceLabels, setShowPlaceLabels] = useState(true);
+	const [showRoadLabels, setShowRoadLabels] = useState(true);
 	const [showPointOfInterestLabels, setShowPointOfInterestLabels] = useState(false);
 	const [showTransitLabels, setShowTransitLabels] = useState(false);
 
